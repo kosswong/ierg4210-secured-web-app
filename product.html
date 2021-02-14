@@ -60,24 +60,31 @@
         .shopping-cart:after {
             bottom: 100%;
             left: 89%;
-            border: solid transparent;
             content: " ";
             height: 0;
             width: 0;
             position: absolute;
             pointer-events: none;
+            border: 8px solid transparent;
             border-bottom-color: white;
-            border-width: 8px;
             margin-left: -8px;
         }
 
         .navbar-right .container {
+            transition: all 5s;
             display: none;
+            position: fixed;
+            left: 0;
+            top: 200px;
+            z-index: 200;
         }
 
         .navbar-right:hover .container {
             z-index: 999;
             display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
         }
     </style>
 </head>
@@ -112,7 +119,7 @@
                     <li><a href="#" id="cart"><i class="fa fa-shopping-cart"></i> Cart <span class="badge">3</span></a>
                     </li>
 
-                    <div class="container" style="position: fixed;left: 0;z-index: 200;">
+                    <div class="container">
                         <div class="shopping-cart">
                             <div class="shopping-cart-header">
                                 <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">3</span>
