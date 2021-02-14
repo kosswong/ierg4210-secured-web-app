@@ -5,67 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="img/favicons/favicon.ico">
     <title>Starter Template for Bootstrap</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/customize.css" rel="stylesheet">
+    <style>
+        .shopping-cart {
+            margin: 20px 0;
+            float: right;
+            background: white;
+            width: 320px;
+            position: relative;
+            border-radius: 3px;
+            padding: 20px;
+            box-shadow: 2px 2px 10px #000;
+        }
+
+        .shopping-cart .shopping-cart-header {
+            border-bottom: 1px solid #E8E8E8;
+            padding-bottom: 15px;
+        }
+
+        .shopping-cart .shopping-cart-header .shopping-cart-total {
+            float: right;
+        }
+
+        .shopping-cart .shopping-cart-items {
+            padding-top: 20px;
+        }
+
+        .shopping-cart .shopping-cart-items li {
+            margin-bottom: 18px;
+        }
+
+        .shopping-cart .shopping-cart-items img {
+            float: left;
+            margin-right: 12px;
+        }
+
+        .shopping-cart .shopping-cart-items .item-name {
+            display: block;
+            padding-top: 10px;
+            font-size: 16px;
+        }
+
+        .shopping-cart .shopping-cart-items .item-price {
+            color: #6394F8;
+            margin-right: 8px;
+        }
+
+        .shopping-cart .shopping-cart-items .item-quantity {
+            color: #ABB0BE;
+        }
+
+        .shopping-cart:after {
+            bottom: 100%;
+            left: 89%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: white;
+            border-width: 8px;
+            margin-left: -8px;
+        }
+
+        .navbar-right .container {
+            display: none;
+        }
+
+        .navbar-right:hover .container {
+            z-index: 999;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-5">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
+                       aria-expanded="false">Dropdown</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <ul class="navbar-right">
+                    <li><a href="#" id="cart"><i class="fa fa-shopping-cart"></i> Cart <span class="badge">3</span></a>
+                    </li>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+                    <div class="container" style="position: fixed;left: 0;z-index: 200;">
+                        <div class="shopping-cart">
+                            <div class="shopping-cart-header">
+                                <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">3</span>
+                                <div class="shopping-cart-total">
+                                    <span class="lighter-text">Total:</span>
+                                    <span class="main-color-text">$2,229.97</span>
+                                </div>
+                            </div> <!--end shopping-cart-header -->
+
+                            <ul class="shopping-cart-items">
+                                <li class="clearfix">
+                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item1.jpg"
+                                         alt="item1"/>
+                                    <span class="item-name">Sony DSC-RX100M III</span>
+                                    <span class="item-price">$849.99</span>
+                                    <span class="item-quantity">Quantity: 01</span>
+                                </li>
+
+                                <li class="clearfix">
+                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item2.jpg"
+                                         alt="item1"/>
+                                    <span class="item-name">KS Automatic Mechanic...</span>
+                                    <span class="item-price">$1,249.99</span>
+                                    <span class="item-quantity">Quantity: 01</span>
+                                </li>
+
+                                <li class="clearfix">
+                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item3.jpg"
+                                         alt="item1"/>
+                                    <span class="item-name">Kindle, 6" Glare-Free To...</span>
+                                    <span class="item-price">$129.99</span>
+                                    <span class="item-quantity">Quantity: 01</span>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="button">Checkout</a>
+                        </div> <!--end shopping-cart -->
+                    </div> <!--end container -->
+                </ul> <!--end navbar-right -->
+
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
     </div>
 </nav>
 
-<main role="main" class="container">
+<main class="container">
 
-    <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a
-            mostly barebones HTML document.</p>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="#">Beverages, Wine & Spirits</a></li>
+            <li class="breadcrumb-item active" aria-current="page">ORGANIC SENCHA TEA BAG</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-4">
+                                <img src="img/product/8994473017374.jpg" class="card-img-top" alt="...">
+                            </div>
+                            <div class="col-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">ORGANIC SENCHA TEA BAG</h5>
+                                    <p class="card-text">HK$30.90</p>
+                                    <a href="product.html" class="btn btn-primary">Detail</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</main>
 
-</main><!-- /.container -->
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="../../assets/js/vendor/popper.min.js"></script>
-<script src="../../dist/js/bootstrap.min.js"></script>
+<script src="js/jquery-3.2.1.slim.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
