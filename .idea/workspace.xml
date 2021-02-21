@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="efdf9cf6-ce25-4311-8a99-809c7f0f221d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/css/customize.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/jquery-3.2.1.slim.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap-grid.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/header.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/product.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +55,8 @@
       <updated>1613204739301</updated>
       <workItem from="1613204741346" duration="3459000" />
       <workItem from="1613270759883" duration="5428000" />
+      <workItem from="1613916467554" duration="4369000" />
+      <workItem from="1613921168016" duration="3012000" />
     </task>
     <servers />
   </component>

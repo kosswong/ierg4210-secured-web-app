@@ -2,204 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Starter Template for Bootstrap</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>eCommerce System</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/customize.css" rel="stylesheet">
-    <style>
-        .shopping-cart {
-            margin: 20px 0;
-            float: right;
-            background: white;
-            width: 320px;
-            position: relative;
-            border-radius: 3px;
-            padding: 20px;
-            box-shadow: 2px 2px 10px #000;
-        }
-
-        .shopping-cart .shopping-cart-header {
-            border-bottom: 1px solid #E8E8E8;
-            padding-bottom: 15px;
-        }
-
-        .shopping-cart .shopping-cart-header .shopping-cart-total {
-            float: right;
-        }
-
-        .shopping-cart .shopping-cart-items {
-            padding-top: 20px;
-        }
-
-        .shopping-cart .shopping-cart-items li {
-            margin-bottom: 18px;
-        }
-
-        .shopping-cart .shopping-cart-items img {
-            float: left;
-            margin-right: 12px;
-        }
-
-        .shopping-cart .shopping-cart-items .item-name {
-            display: block;
-            padding-top: 10px;
-            font-size: 16px;
-        }
-
-        .shopping-cart .shopping-cart-items .item-price {
-            color: #6394F8;
-            margin-right: 8px;
-        }
-
-        .shopping-cart .shopping-cart-items .item-quantity {
-            color: #ABB0BE;
-        }
-
-        .shopping-cart:after {
-            bottom: 100%;
-            left: 89%;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-            border: 8px solid transparent;
-            border-bottom-color: white;
-            margin-left: -8px;
-        }
-
-        .navbar-right .container {
-            transition: all 5s;
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 200px;
-            z-index: 200;
-        }
-
-        .navbar-right:hover .container {
-            z-index: 999;
-            display: block;
-            position: fixed;
-            left: 0;
-            top: 0;
-        }
-    </style>
+    <link href="css/fontawesome-all.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 
 <body>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-5">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
-                       aria-expanded="false">Dropdown</a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-store-alt"></i> e-Commerce System
+            </a>
+            <div class="dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown"
+                        id="cart" type="button">
+                    Shopping List (3) $421.0
+                    <i class="fas fa-shopping-cart"></i>
+                </button>
+                <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
+                    <ul class="list-group">
+                        <li class="list-group-item">ORGANIC SENCHA TEA BAG <span class="float-right">$75.9</span></li>
+                        <li class="list-group-item">C <span class="float-right">$44.3</span></li>
+                        <li class="list-group-item">C++ <span class="float-right">$3.87</span></li>
                     </ul>
-                </li>
-            </ul>
-            <form class="d-flex">
-                <ul class="navbar-right">
-                    <li><a href="#" id="cart"><i class="fa fa-shopping-cart"></i> Cart <span class="badge">3</span></a>
-                    </li>
-
-                    <div class="container">
-                        <div class="shopping-cart">
-                            <div class="shopping-cart-header">
-                                <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">3</span>
-                                <div class="shopping-cart-total">
-                                    <span class="lighter-text">Total:</span>
-                                    <span class="main-color-text">$2,229.97</span>
-                                </div>
-                            </div> <!--end shopping-cart-header -->
-
-                            <ul class="shopping-cart-items">
-                                <li class="clearfix">
-                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item1.jpg"
-                                         alt="item1"/>
-                                    <span class="item-name">Sony DSC-RX100M III</span>
-                                    <span class="item-price">$849.99</span>
-                                    <span class="item-quantity">Quantity: 01</span>
-                                </li>
-
-                                <li class="clearfix">
-                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item2.jpg"
-                                         alt="item1"/>
-                                    <span class="item-name">KS Automatic Mechanic...</span>
-                                    <span class="item-price">$1,249.99</span>
-                                    <span class="item-quantity">Quantity: 01</span>
-                                </li>
-
-                                <li class="clearfix">
-                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item3.jpg"
-                                         alt="item1"/>
-                                    <span class="item-name">Kindle, 6" Glare-Free To...</span>
-                                    <span class="item-price">$129.99</span>
-                                    <span class="item-quantity">Quantity: 01</span>
-                                </li>
-                            </ul>
-
-                            <a href="#" class="button">Checkout</a>
-                        </div> <!--end shopping-cart -->
-                    </div> <!--end container -->
-                </ul> <!--end navbar-right -->
-
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+                    <button class="dropdown-item" type="button">Check Out</button>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
+</header>
+
 
 <main class="container">
-
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" id="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
-            <li class="breadcrumb-item"><a href="#">Beverages, Wine & Spirits</a></li>
-            <li class="breadcrumb-item active" aria-current="page">ORGANIC SENCHA TEA BAG</li>
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.html">Category 1</a></li>
+            <li aria-current="page" class="breadcrumb-item active">ORGANIC SENCHA TEA BAG</li>
         </ol>
     </nav>
-    <div class="row">
-        <div class="col-12">
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                    <div class="card">
-                        <div class="row">
-                            <div class="col-4">
-                                <img src="img/product/8994473017374.jpg" class="card-img-top" alt="...">
+</main>
+
+
+<section class="position-relative bg-light" id="categories">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <img alt="..." class="card-img-top" src="img/product/8994473017374.jpg">
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ORGANIC SENCHA TEA BAG</h5>
+                        <p class="card-text"><s>HK$45.90</s> $38.00</p>
+                        <p>Mauris viverra cursus ante laoreet eleifend. Donec vel fringilla ante. Aenean finibus velit
+                            id urna vehicula, nec maximus est sollicitudin.</p>
+                        <form class="form-inline">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label for="amount">Amount</label>
+                                <select class="form-control" id="amount">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
                             </div>
-                            <div class="col-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">ORGANIC SENCHA TEA BAG</h5>
-                                    <p class="card-text">HK$30.90</p>
-                                    <a href="product.html" class="btn btn-primary">Detail</a>
-                                </div>
-                            </div>
-                        </div>
+                            <button type="submit" class="btn btn-warning mb-2">Add to cart</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</section>
+
+
+<footer class="container">
+    <p>&copy; Company 2017-2018</p>
+</footer>
 
 
 <script src="js/jquery-3.2.1.slim.js"></script>
