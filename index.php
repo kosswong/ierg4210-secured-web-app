@@ -82,11 +82,11 @@ if ($result = $link -> query($sql)) {
                                 while ($row = mysqli_fetch_array($result)) {
                                     echo '<div class="col-4">';
                                     echo '<div class="card">';
-                                    echo '<img alt="Great Item" class="card-img-top" src="img/product/o/1.jpg">';
+                                    echo '<img alt="Great Item" class="card-img-top" src="img/product/o/' . $row['catid'] . '.jpg">';
                                     echo '<div class="card-body">';
                                     echo '<h5 class="card-title">' . $row['name'] . '</h5>';
                                     echo '<p class="card-text">HK$' . $row['price'] . '</p>';
-                                    echo '<a class="btn btn-primary" href="product.php?catid=' . $row['catid'] . '">Detail</a>';
+                                    echo '<a class="btn btn-primary" href="product.php?pid=' . $row['catid'] . '">Detail</a>';
                                     echo '<a class="btn btn-warning" href="#">Add to cart</a>';
                                     echo '</div>';
                                     echo '</div>';

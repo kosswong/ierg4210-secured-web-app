@@ -6,18 +6,6 @@ if ($link === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
-
-// Insert category
-if (isset($_POST["cat_name"]) && isset($_GET["action"]) && $_GET["action"] == 'add') {
-    $sql = "INSERT INTO `categories` (`catid`, `name`) VALUES (NULL, '" . $_POST["cat_name"] . "');";// LIMIT 3
-    if ($link->query($sql) === TRUE) {
-        echo "New record created successfully";
-    } else {
-        echo "Error: " . $sql . "<br>" . $link->error;
-    }
-}
-
-// Delete category
 if (isset($_GET["action"])) {
 
     if ($_GET["action"] == 'add' && isset($_POST["cat_name"])) {
