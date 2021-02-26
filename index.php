@@ -4,7 +4,7 @@ require 'header.php';
 $link = mysqli_connect("localhost", "root", "", "test");
 
 $catid = isset($_GET['catid']) ? $_GET['catid'] : 1;
-$sql = "SELECT * FROM categories WHERE catid='".$_GET["catid"]."' LIMIT 1";// LIMIT 3
+$sql = "SELECT * FROM categories WHERE catid='".$catid."' LIMIT 1";// LIMIT 3
 if ($result = $link -> query($sql)) {
     while ($row = $result->fetch_row()) {
         $catname = $row[1];
@@ -15,7 +15,7 @@ if ($result = $link -> query($sql)) {
     <main class="container">
         <nav aria-label="breadcrumb" id="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                 <li aria-current="page" class="breadcrumb-item active"><?php echo $catname?></li>
             </ol>
         </nav>
