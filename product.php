@@ -1,41 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <title>eCommerce System</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/fontawesome-all.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-</head>
-
-<body>
-<header>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <i class="fas fa-store-alt"></i> e-Commerce System
-            </a>
-            <div class="dropdown">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary dropdown-toggle"
-                        data-toggle="dropdown"
-                        id="cart" type="button">
-                    Shopping List (3) $421.0
-                    <i class="fas fa-shopping-cart"></i>
-                </button>
-                <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
-                    <ul class="list-group">
-                        <li class="list-group-item">ORGANIC SENCHA TEA BAG <span class="float-right">$75.9</span></li>
-                        <li class="list-group-item">C <span class="float-right">$44.3</span></li>
-                        <li class="list-group-item">C++ <span class="float-right">$3.87</span></li>
-                    </ul>
-                    <button class="dropdown-item" type="button">Check Out</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
+<?php require 'header.php'; ?>
 
 <main class="container">
     <nav aria-label="breadcrumb" id="breadcrumb">
@@ -81,13 +44,4 @@
     </div>
 </section>
 
-
-<footer class="container">
-    <p>&copy; Company 2017-2018</p>
-</footer>
-
-
-<script src="js/jquery-3.2.1.slim.js"></script>
-<script src="js/bootstrap.min.js"></script>
-</body>
-</html>
+<?php require 'footer.php'; ?>
