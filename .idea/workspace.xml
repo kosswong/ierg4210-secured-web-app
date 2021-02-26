@@ -32,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hok6/frontend" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -53,6 +53,7 @@
       <workItem from="1613270759883" duration="5428000" />
       <workItem from="1613916467554" duration="4369000" />
       <workItem from="1613921168016" duration="3373000" />
+      <workItem from="1614165802630" duration="64000" />
     </task>
     <servers />
   </component>
@@ -70,5 +71,11 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="533" y="239" key="FileChooserDialogImpl" timestamp="1614165864828">
+      <screen x="0" y="0" width="1504" height="963" />
+    </state>
+    <state x="533" y="239" key="FileChooserDialogImpl/0.0.1504.963@0.0.1504.963" timestamp="1614165864828" />
   </component>
 </project>
