@@ -21,7 +21,8 @@ if ($result = $sql->get_result()) {
         $name = $row[2];
         $price = $row[3];
         $description = $row[4];
-        $catname = $row[8];
+        $image = $row[8];
+        $catname = $row[9];
     }
 }
 ?>
@@ -41,7 +42,7 @@ if ($result = $sql->get_result()) {
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-6">
-                <img alt="..." class="card-img-top" src="img/product/o/<?php echo $pid?>.jpg">
+                <img alt="..." class="card-img-top" src="img/product/o/<?php echo $image?>">
             </div>
             <div class="col-12 col-md-6">
                 <div class="card">

@@ -98,3 +98,5 @@ Add:<br>
     <input type="text" id="cat_name" name="cat_name" value="Test"><br><br>
     <input type="submit" value="Submit">
 </form>
+
+<a href='products.php'>Edit Products</a>

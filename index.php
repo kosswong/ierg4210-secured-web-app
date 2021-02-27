@@ -32,7 +32,7 @@ if ($result = mysqli_query($conn, $sql_cat)) {
                         while ($product = $result_product->fetch_array()) {
                             $p_list .= '<div class="col-4">'
                                 .'<div class="card">'
-                                .'<img alt="Great Item" class="card-img-top" src="img/product/o/' . $product['pid'] . '.jpg">'
+                                .'<img alt="Great Item" class="card-img-top" src="img/product/s/' . $product['image'] . '">'
                                 .'<div class="card-body">'
                                 .'<h5 class="card-title">' . $product['name'] . '</h5>'
                                 .'<p class="card-text">HK$' . $product['price'] . '</p>'

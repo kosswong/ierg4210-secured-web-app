@@ -1,69 +1,105 @@
 <?php
 $link = mysqli_connect("localhost", "root", "", "test");
-$target_dir = "../img/product/o/";
+// Check connection
+if ($link === false) {
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
 
 $pid = '';
 $catid = '';
 $name = '';
 $price = '';
 $description = '';
+$categories = [];
+$cat_list = '';
 
-// Check connection
-if ($link === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
+// Get categories
+$sql = "SELECT * FROM categories";
+if ($result = mysqli_query($link, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            $categories[$row['catid']] = $row['name'];
+            $cat_list .= "<option value=\"" . $row['catid'] . "\">" . $row['name'] . "</option>";
+        }
+        mysqli_free_result($result); // Close result set
+    }
+} else {
+    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+}
+
+function uploadImage($insert_id) {
+    $target_dir = "../img/product/o/";
+    $target_resized_dir = "../img/product/s/";
+
+    $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+    $target_file = $target_dir . $insert_id. '.' . $imageFileType;
+    $uploadOk = 1;
+    // Check if image file is a actual image or fake image
+    if (isset($_POST["submit"])) {
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
+        if ($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+        } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+    }
+
+    //Maximum 10MB
+    if ($_FILES["image"]["size"] >= 10000000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+
+    // Check file format, only jpg/gif/png is allowed
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }else {
+        // Make a resized version image
+        $target_resized_file = $target_resized_dir . $insert_id . '.' . $imageFileType;
+        if ($imageFileType == "jpg" || $imageFileType == "jpeg") {
+            $image = imagecreatefromjpeg($_FILES["image"]["tmp_name"]);
+        }else if($imageFileType == "png"){
+            $image = imagecreatefrompng($_FILES["image"]["tmp_name"]);
+        }else if($imageFileType == "gif"){
+            $image = imagecreatefromgif($_FILES["image"]["tmp_name"]);
+        }
+        $imgResized = imagescale($image, 200, 200);
+        imagejpeg($imgResized, $target_resized_file);
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+            echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
+            return $imageFileType;
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+            return false;
+        }
+    }
 }
 
 if (isset($_GET["action"])) {
 
     // Add product
     if ($_GET["action"] == 'add' && isset($_POST["name"])) {
-        $sql = "INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, '" . $_POST["catid"] . "', '" . $_POST["name"] . "', '" . $_POST["price"] . "', '" . $_POST["description"] . "');";// LIMIT 3
-        if ($link->query($sql) === TRUE) {
+        $sql = $link->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");
+        $sql->bind_param('isds', $_POST["catid"], $_POST["name"], $_POST["price"], $_POST["description"]); // 'i' specifies the variable type => 'integer'
+        if ($sql->execute() === TRUE) {
+            $insert_id = $sql->insert_id;
             echo "New record created successfully";
-            if (isset($_FILES["image"])) {
-                $target_file = $target_dir . basename($_FILES["image"]["name"]);
-                $uploadOk = 1;
-                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
-                if (isset($_POST["submit"])) {
-                    $check = getimagesize($_FILES["image"]["tmp_name"]);
-                    if ($check !== false) {
-                        echo "File is an image - " . $check["mime"] . ".";
-                        $uploadOk = 1;
-                    } else {
-                        echo "File is not an image.";
-                        $uploadOk = 0;
-                    }
-                }
-
-// Check if file already exists
-                if (file_exists($target_file)) {
-                    echo "Sorry, file already exists.";
-                    $uploadOk = 0;
-                }
-
-// Check file size
-                if ($_FILES["image"]["size"] > 500000) {
-                    echo "Sorry, your file is too large.";
-                    $uploadOk = 0;
-                }
-
-// Allow certain file formats
-                if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                    && $imageFileType != "gif") {
-                    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                    $uploadOk = 0;
-                }
-
-// Check if $uploadOk is set to 0 by an error
-                if ($uploadOk == 0) {
-                    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-                } else {
-                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                        echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
-                    } else {
-                        echo "Sorry, there was an error uploading your file.";
+            if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
+                $imageFileType = uploadImage($insert_id);
+                if($imageFileType) {
+                    $sql = "UPDATE products SET image='" . $insert_id . '.' . $imageFileType . "' WHERE pid='" . $insert_id . "'";
+                    if ($link->query($sql) === TRUE) {
+                        echo "Record created successfully";
                     }
                 }
             }
@@ -99,30 +135,24 @@ if (isset($_GET["action"])) {
 
     // Save product
     if ($_GET["action"] == 'save' && isset($_POST["pid"])) {
-        $sql = "UPDATE products SET name='" . $_POST["name"] . "', price='" . $_POST["price"] . "', description='" . $_POST["description"] . "' WHERE pid='" . $_POST["pid"] . "'";
-        if ($link->query($sql) === TRUE) {
+        $sql = $link->prepare("UPDATE products SET name=?, price=?, description=? WHERE pid=?");
+        $sql->bind_param('sdsi', $_POST["name"], $_POST["price"], $_POST["description"], $_POST["pid"]); // 'i' specifies the variable type => 'integer'
+        if ($sql->execute() === TRUE) {
             echo "Record updated successfully";
+            if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
+                $imageFileType = uploadImage($_POST["pid"]);
+                if($imageFileType) {
+                    $sql = "UPDATE products SET image='" . $_POST["pid"] . '.' . $imageFileType . "' WHERE pid='" . $_POST["pid"] . "'";
+                    if ($link->query($sql) === TRUE) {
+                        echo "Record updated successfully";
+                    }
+                }
+            }
         } else {
             echo "Error updating record: " . $link->error;
         }
     }
 
-}
-
-// Get categories
-$sql = "SELECT * FROM categories";// LIMIT 3
-$cat_list = "";
-if ($result = mysqli_query($link, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            $cat_list .= "<option value=\"" . $row['catid'] . "\">" . $row['name'] . "</option>";
-        }
-        mysqli_free_result($result); // Close result set
-    } else {
-        echo "No records matching your query were found.";
-    }
-} else {
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
 }
 
 // Attempt select query execution
@@ -132,7 +162,7 @@ if ($result = mysqli_query($link, $sql)) {
         echo "<table>";
         echo "<tr>";
         echo "<th>pid</th>";
-        echo "<th>catid</th>";
+        echo "<th><a href='index.php'>Category</a></th>";
         echo "<th>name</th>";
         echo "<th>price</th>";
         echo "<th>description</th>";
@@ -141,7 +171,7 @@ if ($result = mysqli_query($link, $sql)) {
         while ($row = mysqli_fetch_array($result)) {
             echo "<tr>";
             echo "<td>" . $row['pid'] . "</td>";
-            echo "<td>" . $row['catid'] . "</td>";
+            echo "<td>" . $categories[$row['catid']] . "</td>";
             echo "<td>" . $row['name'] . "</td>";
             echo "<td>" . $row['price'] . "</td>";
             echo "<td>" . $row['description'] . "</td>";
@@ -187,10 +217,14 @@ mysqli_close($link);
     <input name="price" id="price" type="number" min="0.00" max="10000.00" step="0.01" value="<?= $price ?>"><br><br>
 
     <label for="description">Product Description:</label><br>
-    <input type="text" id="description" name="description" value="<?= $description ?>"><br><br>
+    <textarea id="description" name="description" rows="4" cols="50"><?= $description ?></textarea><br><br>
 
     <label for="image">Select image to upload:</label><br>
     <input type="file" name="image" id="fileToUpload"><br><br>
 
     <input type="submit" value="Add" name="submit">
 </form>
+
+<br><br>
+
+<a href='index.php'>Edit Categories</a>
