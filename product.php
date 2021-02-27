@@ -1,18 +1,27 @@
 <?php
 require 'header.php';
 
-$link = mysqli_connect("localhost", "root", "", "test");
+$conn = mysqli_connect("localhost", "root", "", "test");
+if ($conn === false) {
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
 
-$pid = isset($_GET['pid']) ? $_GET['pid'] : 1;
-$sql = "SELECT products.*, categories.name as cname FROM products JOIN categories ON products.catid = categories.catid WHERE pid='".$pid."' LIMIT 1 ";// LIMIT 3
-if ($result = $link -> query($sql)) {
+// Numeric check
+$pid = (isset($_GET['pid']) && is_numeric($_GET['pid']) && ($_GET['pid'] > 0)) ? $_GET['pid'] : 1;
+
+// Prevent SQL injection
+$sql = $conn->prepare('SELECT products.*, categories.name as cname FROM products JOIN categories ON products.catid = categories.catid WHERE pid=? LIMIT 1');
+$sql->bind_param('i', $pid); // 'i' specifies the variable type => 'integer'
+$sql->execute();
+
+if ($result = $sql->get_result()) {
     while ($row = $result->fetch_row()) {
         $pid = $row[0];
         $catid = $row[1];
         $name = $row[2];
         $price = $row[3];
         $description = $row[4];
-        $catname = $row[5];
+        $catname = $row[8];
     }
 }
 ?>
