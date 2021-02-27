@@ -32,7 +32,7 @@ if (isset($_GET["action"])) {
             while ($row = $result -> fetch_row()) {
                 echo 'edit';
                 echo '';
-                echo '<form action="/categories.php?action=save" method="post">';
+                echo '<form action="categories.php?action=save" method="post">';
                 echo '<label for="cat_name">Catergoires ID:</label><br>';
                 echo '' . $row[0] . '<br><br>';
                 echo '<label for="cat_name">Catergoires Name:</label><br>';
@@ -93,10 +93,11 @@ mysqli_close($link);
 ?>
 
 Add:<br>
-<form action="/categories.php?action=add" method="post">
+<form action="categories.php?action=add" method="post">
     <label for="cat_name">Categories Name:</label><br>
     <input type="text" id="cat_name" name="cat_name" value="Test"><br><br>
     <input type="submit" value="Submit">
 </form>
 
-<a href='products.php'>Edit Products</a>
+<a href='../admin/products.php'>Edit Products</a> |
+<a href='../index.php'>Home</a>

@@ -155,49 +155,48 @@ if (isset($_GET["action"])) {
 
 }
 
+if (!isset($_GET["action"]) || isset($_GET["action"]) && $_GET["action"] != 'edit') {
 // Attempt select query execution
-$sql = "SELECT * FROM products";// LIMIT 3
-if ($result = mysqli_query($link, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        echo "<table>";
-        echo "<tr>";
-        echo "<th>pid</th>";
-        echo "<th><a href='index.php'>Category</a></th>";
-        echo "<th>name</th>";
-        echo "<th>price</th>";
-        echo "<th>description</th>";
-        echo "<th>operation</th>";
-        echo "</tr>";
-        while ($row = mysqli_fetch_array($result)) {
+    $sql = "SELECT * FROM products";// LIMIT 3
+    if ($result = mysqli_query($link, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            echo "<table>";
             echo "<tr>";
-            echo "<td>" . $row['pid'] . "</td>";
-            echo "<td>" . $categories[$row['catid']] . "</td>";
-            echo "<td>" . $row['name'] . "</td>";
-            echo "<td>" . $row['price'] . "</td>";
-            echo "<td>" . $row['description'] . "</td>";
-            echo "<td>
+            echo "<th>pid</th>";
+            echo "<th><a href='categories.php'>Category</a></th>";
+            echo "<th>name</th>";
+            echo "<th>price</th>";
+            echo "<th>description</th>";
+            echo "<th>operation</th>";
+            echo "</tr>";
+            while ($row = mysqli_fetch_array($result)) {
+                echo "<tr>";
+                echo "<td>" . $row['pid'] . "</td>";
+                echo "<td>" . $categories[$row['catid']] . "</td>";
+                echo "<td>" . $row['name'] . "</td>";
+                echo "<td>" . $row['price'] . "</td>";
+                echo "<td>" . $row['description'] . "</td>";
+                echo "<td>
 <a href=\"products.php?action=edit&pid=" . $row['pid'] . "\">Edit</a>
 <a href=\"products.php?action=delete&pid=" . $row['pid'] . "\">Delete</a>
 </td>";
-            echo "</tr>";
+                echo "</tr>";
+            }
+            echo "</table>";
+            // Close result set
+            mysqli_free_result($result);
+        } else {
+            echo "No records matching your query were found.";
         }
-        echo "</table>";
-        // Close result set
-        mysqli_free_result($result);
     } else {
-        echo "No records matching your query were found.";
+        echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
     }
-} else {
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
 }
-
 
 // Close connection
 mysqli_close($link);
 ?>
-<br><br><br><br><br><br>
-
-
+<br><br>
 <form action="products.php?action=<?= $pid ? 'save' : 'add' ?>" method="post" enctype="multipart/form-data">
     <?= $pid ? 'Edit' : 'Add' ?> a new product<br>
 
@@ -222,9 +221,10 @@ mysqli_close($link);
     <label for="image">Select image to upload:</label><br>
     <input type="file" name="image" id="fileToUpload"><br><br>
 
-    <input type="submit" value="Add" name="submit">
+    <input type="submit" value="<?= $pid ? 'Edit' : 'Add' ?>" name="submit">
 </form>
 
 <br><br>
 
-<a href='index.php'>Edit Categories</a>
+<a href='categories.php'>Edit Categories</a> |
+<a href='../index.php'>Home</a>

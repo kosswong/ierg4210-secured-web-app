@@ -2,38 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="efdf9cf6-ce25-4311-8a99-809c7f0f221d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/database.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/categories.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/categories.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/products.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/products.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8829239132190.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8863388205086.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8879818801182.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8885417967646.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8893729832990.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8895894618142.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8895900745758.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8937457254430.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8971664588830.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/8994473017374.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9103867019294.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9103904079902.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9104301621278.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9114520420382.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9114533789726.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9156205183006.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9215332843550.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9215335923742.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9249949581342.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9362205311006.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/9421022822430.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/o/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/o/2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/o/3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/o/3.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/o/4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/o/4.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/o/5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/o/5.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/product/o/6.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/o/6.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product.php" beforeDir="false" afterPath="$PROJECT_DIR$/product.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/product/s/3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/s/3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/product/s/5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/img/product/s/5.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload_image.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +62,7 @@
       <workItem from="1613916467554" duration="4369000" />
       <workItem from="1613921168016" duration="3373000" />
       <workItem from="1614165802630" duration="64000" />
-      <workItem from="1614431921283" duration="8390000" />
+      <workItem from="1614431921283" duration="9569000" />
     </task>
     <servers />
   </component>
