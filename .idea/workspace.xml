@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="efdf9cf6-ce25-4311-8a99-809c7f0f221d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hok6/frontend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -54,6 +54,7 @@
       <workItem from="1613916467554" duration="4369000" />
       <workItem from="1613921168016" duration="3373000" />
       <workItem from="1614165802630" duration="64000" />
+      <workItem from="1614431921283" duration="682000" />
     </task>
     <servers />
   </component>
@@ -71,11 +72,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="533" y="239" key="FileChooserDialogImpl" timestamp="1614165864828">
-      <screen x="0" y="0" width="1504" height="963" />
-    </state>
-    <state x="533" y="239" key="FileChooserDialogImpl/0.0.1504.963@0.0.1504.963" timestamp="1614165864828" />
   </component>
 </project>
