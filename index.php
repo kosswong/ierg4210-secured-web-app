@@ -1,6 +1,5 @@
 <?php
 require 'header.php';
-
 // Connect mySQL
 $conn = mysqli_connect("localhost", "root", "", "test");
 if ($conn === false) {

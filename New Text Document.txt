@@ -1,0 +1,3 @@
+ALTER TABLE products MODIFY COLUMN pid INT auto_increment;
+
+sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2

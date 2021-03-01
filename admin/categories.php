@@ -9,7 +9,7 @@ if ($link === false) {
 if (isset($_GET["action"])) {
 
     if ($_GET["action"] == 'add' && isset($_POST["cat_name"])) {
-        $sql = "INSERT INTO `categories` (`catid`, `name`) VALUES (NULL, '" . $_POST["cat_name"] . "');";// LIMIT 3
+        $sql = "INSERT INTO `categories` (`name`) VALUES ('" . $_POST["cat_name"] . "');";// LIMIT 3
         if ($link->query($sql) === TRUE) {
             echo "New record created successfully";
         } else {
