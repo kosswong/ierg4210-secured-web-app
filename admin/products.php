@@ -89,29 +89,21 @@ if (isset($_GET["action"])) {
 
     // Get product name and price
     if ($_GET["action"] == 'api') {
-        if(isset($_POST['categories'])) {
-            $json = $_POST['categories'];
-            var_dump(json_decode($json, true));
+        if(isset($_POST['id'])) {
             header('Content-Type: application/json');
-            echo json_encode(array('foo' => 'bar'));
+            $sql = "SELECT * FROM products WHERE pid='" . $_POST['id'] . "' LIMIT 1";// LIMIT 3
+            if ($result = $link->query($sql)) {
+                while ($row = $result->fetch_row()) {
+                    echo json_encode(array('id' => $row[0], 'name' => $row[2],'price'=>$row[3]));
+                }
+                $result->free_result();
+            }
             exit;
         } else {
             header('Content-Type: application/json');
-            echo json_encode(array('foo' => 'bar2'));
+            echo json_encode(array('msg' => 'Error!'));
             exit;
         }
-        /*
-        $sql = "SELECT * FROM products WHERE pid='" . $_GET["pid"] . "' LIMIT 1";// LIMIT 3
-        if ($result = $link->query($sql)) {
-            while ($row = $result->fetch_row()) {
-                $pid = $row[0];
-                $catid = $row[1];
-                $name = $row[2];
-                $price = $row[3];
-                $description = $row[4];
-            }
-            $result->free_result();
-        }*/
     }
 
     // Add product

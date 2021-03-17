@@ -77,7 +77,7 @@ if ($result = mysqli_query($conn, $sql_cat)) {
                                 . '<h5 class="card-title">' . $product['name'] . '</h5>'
                                 . '<p class="card-text">HK$' . $product['price'] . '</p>'
                                 . '<a class="btn btn-primary" href="product.php?pid=' . $product['pid'] . '">Detail</a>'
-                                . '<button type="button" class="btn btn-warning btn-add-to-cart" id="item-' . $product['pid'] . '" data-id="' . $product['pid'] . '" data-name="' . $product['name'] . '" data-price="' . $product['price'] . '">
+                                . '<button type="button" class="btn btn-warning btn-add-to-cart" id="item-' . $product['pid'] . '" data-id="' . $product['pid'] . '">
 Add to cart</button>'
                                 . '</div>'
                                 . '</div>'
@@ -178,16 +178,7 @@ mysqli_close($conn);
                 // If item already exist
                 let itemInStorage = itemExistInStorage(cart.items, t.data("id"));
                 if (!itemInStorage) {
-                    let newItem = {
-                        id: t.data("id"),
-                        name: t.data("name"),
-                        price: t.data("price"),
-                        amount: 1,
-                        addAt: $.now()
-                    };
-                    cart.items.push(newItem);
-                    let key = itemExistInStorage(cart.items, t.data("id"), true);
-                    addItemOnPresenter(key, newItem);
+                    retrieveDetailFromServer(t.data("id"));
                 } else {
                     itemInStorage["amount"] = itemInStorage["amount"] + 1;
                 }
@@ -202,14 +193,26 @@ mysqli_close($conn);
     });
 
 
-    function retrieveDetailFromServer(key, item) {
+    function retrieveDetailFromServer(itemId, amount = 1) {
         $.ajax({
             type: 'POST',
             url: 'admin/products.php?action=api',
             dataType: 'json',
-            data: cart.items,
+            data: {
+                id: itemId,
+                amount: amount,
+            },
             success: function(msg) {
-                console.log(msg);
+                let newItem = ({
+                    id: itemId,
+                    name: msg.name,
+                    price: msg.price,
+                    amount: amount,
+                    addAt: $.now()
+                });
+                cart.items.push(newItem);
+                let key = itemExistInStorage(cart.items, itemId, true);
+                addItemOnPresenter(key, newItem);
             }
         });
     }
@@ -237,7 +240,7 @@ mysqli_close($conn);
     }
 
 
-    function onChangeItemAmount(item, key, id) {
+    function onChangeItemAmount(item, key) {
         if(item.value > 0){
             cart.items[key]["amount"] = item.value;
         }else{
