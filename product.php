@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require 'inc/header.php';
 
 $conn = mysqli_connect("localhost", "root", "", "test");
 if ($conn === false) {
@@ -53,15 +53,9 @@ if ($result = $sql->get_result()) {
                         <form class="form-inline">
                             <div class="form-group mx-sm-3 mb-2">
                                 <label for="amount">Amount</label>
-                                <select class="form-control" id="amount">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
+                                <input class="form-control btn-add-to-cart-main-amount" id="amount" min="0" type="number" value="1">
                             </div>
-                            <button type="submit" class="btn btn-warning mb-2">Add to cart</button>
+                            <button type="submit" class="btn btn-warning mb-2 btn-add-to-cart" id="item-<?php echo $pid?>" data-id="<?php echo $pid?>">Add to cart</button>
                         </form>
                     </div>
                 </div>
@@ -70,4 +64,4 @@ if ($result = $sql->get_result()) {
     </div>
 </section>
 
-<?php require 'footer.php'; ?>
+<?php require 'inc/footer.php'; ?>

@@ -3,5 +3,8 @@
 
 </footer>
 
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/cart.js"></script>
 </body>
 </html>
