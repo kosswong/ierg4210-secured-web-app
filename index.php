@@ -201,6 +201,7 @@ mysqli_close($conn);
 
     });
 
+
     function retrieveDetailFromServer(key, item) {
         $.ajax({
             type: 'POST',
@@ -212,6 +213,7 @@ mysqli_close($conn);
             }
         });
     }
+
 
     function addItemOnPresenter(key, item) {
         $("#shopping-list").append(
@@ -226,12 +228,14 @@ mysqli_close($conn);
         );
     }
 
+
     function itemExistInStorage(items, itemId, itemKey = false) {
         for (let i = 0; i < items.length; i++) {
             if (items[i].id === itemId)
                 return (itemKey === true) ? i : items[i];
         }
     }
+
 
     function onChangeItemAmount(item, key, id) {
         if(item.value > 0){
@@ -245,6 +249,7 @@ mysqli_close($conn);
         }
         updateLocalStorage();
     }
+
 
     function removeItem(key) {
         cart.items.splice(key,1);
@@ -268,14 +273,6 @@ mysqli_close($conn);
         $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
     }
 
-    function updateItemList() {
-        let totalPrice = 0;
-        $.each(cart.items, function( key, value ) {
-            totalPrice += value.amount * value.price;
-        });
-        $(".shopping-cart-popup-price").html('$ ' + totalPrice);
-        $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
-    }
 
     function updateLocalStorage() {
         localStorage.setItem("shopping_cart", JSON.stringify(cart));
