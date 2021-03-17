@@ -20,17 +20,40 @@
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary dropdown-toggle"
                         data-toggle="dropdown"
                         id="cart" type="button">
-                    Shopping List <span class="shopping-cart-popup-item-amount"></span> <span class="shopping-cart-popup-price">$4.0</span>
+                    Shopping List (3) $4.0
                     <i class="fas fa-shopping-cart"></i>
                 </button>
                 <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
                     <form action="http://www.paypal.com" method="POST">
-                        <div class="container shopping-list">
-                            <div id="shopping-list">
+                        <div class="container shopping-list" id="shopping-list">
+                            <div class="form-row">
+                                <div class="form-group col-12"><label for="item_a">Item A</label></div>
+                                <div class="form-group col-6">
+                                    <input class="form-control" id="item_a" min="0" name="item_a" type="number"
+                                           value="1">
+                                </div>
+                                <div class="form-group col-6 text-right">$30.7</div>
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-12"><label for="item_b">Item B</label></div>
+                                <div class="form-group col-6">
+                                    <input class="form-control" id="item_b" min="0" type="number" value="1">
+                                </div>
+                                <div class="form-group col-6 text-right">$38.7</div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-12"><label for="item_c">Item C</label></div>
+                                <div class="form-group col-6">
+                                    <input class="form-control" id="item_c" min="0" type="number" value="3">
+                                </div>
+                                <div class="form-group col-6 text-right">$12.7</div>
+                            </div>
+
                             <div class="form-row">
                                 <div class="form-group col-6">Sum (Estimate):</div>
-                                <div class="form-group col-6 text-right shopping-cart-popup-price">$ 0</div>
+                                <div class="form-group col-6 text-right">$82.1 </div>
                                 <button class="btn btn-primary btn-block" type="submit">Check Out</button>
                             </div>
                         </div>
@@ -77,8 +100,7 @@ if ($result = mysqli_query($conn, $sql_cat)) {
                                 . '<h5 class="card-title">' . $product['name'] . '</h5>'
                                 . '<p class="card-text">HK$' . $product['price'] . '</p>'
                                 . '<a class="btn btn-primary" href="product.php?pid=' . $product['pid'] . '">Detail</a>'
-                                . '<button type="button" class="btn btn-warning btn-add-to-cart" id="item-' . $product['pid'] . '" data-id="' . $product['pid'] . '" data-name="' . $product['name'] . '" data-price="' . $product['price'] . '">
-Add to cart</button>'
+                                . '<a class="btn btn-warning" href="#">Add to cart</a>'
                                 . '</div>'
                                 . '</div>'
                                 . '</div>';
@@ -143,143 +165,130 @@ mysqli_close($conn);
     </div>
 </section>
 
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="well item-1-container">
+                <p class="lead">
+                    Item 1
+                </p>
+                <button class="btn btn-primary" id="item-1" data-id="item-1">+</button>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="well item-2-container">
+                <p class="lead">
+                    Item 2
+                </p>
+                <button class="btn btn-primary" id="item-2" data-id="item-2">+</button>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="well item-3-container">
+                <p class="lead">
+                    Item 3
+                </p>
+                <button class="btn btn-primary" id="item-3" data-id="item-3">+</button>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="well item-4-container">
+                <p class="lead">
+                    Item 4
+                </p>
+                <button class="btn btn-primary" id="item-4" data-id="item-4">+</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+<hr/>
 
+<div class="container">
+    <h3>The List</h3>
+    <ul class="list-unstyled list-inline"></ul>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script>
     let cart = {};
-    let cart_detail = {};
-    cart.items = [];
-
     $(document).ready(function () {
 
         // Check local data, it nothing exist, then create
         if (localStorage.getItem("shopping_cart") != null) {
             let items = JSON.parse(localStorage.getItem("shopping_cart")).items;
             for (let i = 0; i < items.length; i++) {
-                if($.isNumeric(items[i].amount) && $.isNumeric(items[i].price)) {
-                    addItemOnPresenter(i, items[i]);
-                    cart.items.push(items[i]);
-                }
+                addItem(items[i]);
+                cart.items.push(items[i]);
             }
-            updateTotalPriceOnPresenter();
+            setBadge();
         }
 
-        $(".btn-add-to-cart").click(function (e) {
+        $(".btn-primary").click(function (e) {
+            $(this).toggleClass("btn-warning");
+            toggleText($(this).attr('id'));
 
-            let t = $(this);
-            let loadingText = 'Adding...';
-            if (t.html() !== loadingText) {
-                t.data('original-text', t.html());
-                t.html(loadingText);
-                t.addClass("disabled");
-
-                // If item already exist
-                let itemInStorage = itemExistInStorage(cart.items, t.data("id"));
-                if (!itemInStorage) {
-                    let newItem = {
-                        id: t.data("id"),
-                        name: t.data("name"),
-                        price: t.data("price"),
-                        amount: 1,
-                        addAt: $.now()
-                    };
-                    cart.items.push(newItem);
-                    let key = itemExistInStorage(cart.items, t.data("id"), true);
-                    addItemOnPresenter(key, newItem);
-                } else {
-                    itemInStorage["amount"] = itemInStorage["amount"] + 1;
-                }
-
-                t.removeClass("disabled");
-                t.html(t.data('original-text'));
+            if (!$(`li[data-attribute="${e.target.id}"]`).length) {
+                addItem(e.target.id);
+            } else {
+                $(`li[data-attribute="${e.target.id}"]`).remove();
             }
-
-            updateLocalStorage();
+            setBadge();
+            setLocalStorage(e.target.id, 0);
+            $(".btn-danger").on('click', function () {
+                removeItem($(this).parent("li"));
+                setLocalStorage($(this).data('id'), 1);
+            });
         });
 
+        $(".btn-danger").on('click', function () {
+            removeItem($(this).parent("li"));
+            setLocalStorage($(this).data('id'), 1);
+        });
     });
 
-    function retrieveDetailFromServer(key, item) {
-        $.ajax({
-            type: 'POST',
-            url: 'admin/products.php?action=api',
-            dataType: 'json',
-            data: cart.items,
-            success: function(msg) {
-                console.log(msg);
-            }
-        });
+    function removeItem(item) {
+        console.log(item);
+        var id = item[0].attributes[1].value;
+        $(`#${id}`).removeClass("btn-warning");
+        toggleText(id);
+        item.remove();
+        setBadge();
     }
 
-    function addItemOnPresenter(key, item) {
-        $("#shopping-list").append(
-            '<div class="form-row" data-attribute=' + item.id + '>\n' +
-            '    <div class="form-group col-12"><label for="item_' + item.id + '">' + item.name + '</label></div>\n' +
-            '    <div class="form-group col-6">\n' +
-            '        <input class="form-control" id="item_' + item.id + '" min="0" type="number"\n' +
-            '               value="' + item.amount + '"  onchange="onChangeItemAmount(this, ' + key + ', '+ item.id +');">\n' +
-            '    </div>\n' +
-            '    <div class="form-group col-6 text-right">$'+ item.amount * item.price +'</div>\n' +
-            '</div>'
+    function addItem(item) {
+        $("ul").append(
+            `<li class='well' data-attribute='${item}'>
+${$(`.${item}-container p`).text()}
+<button class='btn btn-danger' data-id='${item}'>-</button>
+</li>`
         );
     }
 
-    function itemExistInStorage(items, itemId, itemKey = false) {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === itemId)
-                return (itemKey === true) ? i : items[i];
+    function setBadge() {
+        $(".badge").remove();
+        $("h3").after("<span class='badge'>" + $("li").length + "</span>");
+    }
+
+    function toggleText(item) {
+        if ($('#' + item).hasClass("btn-warning")) {
+            $('#' + item).text("-");
+        } else {
+            $('#' + item).text("+");
         }
     }
 
-    function onChangeItemAmount(item, key, id) {
-        if(item.value > 0){
-            cart.items[key]["amount"] = item.value;
-        }else{
-            if (confirm('Are you sure to remove the item?')) {
-                removeItem(key);
-            } else {
-                cart.items[key]["amount"] = 1;
-            }
+
+    cart.items = [];
+
+    function setLocalStorage(id, flag) {
+        if (flag) {
+            cart.items.splice(cart.items.indexOf(id), 1);
+        } else {
+            cart.items.push(id);
         }
-        updateLocalStorage();
-    }
-
-    function removeItem(key) {
-        cart.items.splice(key,1);
-        $("#shopping-list").empty();
-        let items = cart.items;
-        for (let i = 0; i < items.length; i++) {
-            if($.isNumeric(items[i].amount) && $.isNumeric(items[i].price)) {
-                addItemOnPresenter(i, items[i]);
-            }
-        }
-        updateLocalStorage();
-    }
-
-
-    function updateTotalPriceOnPresenter() {
-        let totalPrice = 0;
-        $.each(cart.items, function( key, value ) {
-            totalPrice += value.amount * value.price;
-        });
-        $(".shopping-cart-popup-price").html('$ ' + totalPrice);
-        $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
-    }
-
-    function updateItemList() {
-        let totalPrice = 0;
-        $.each(cart.items, function( key, value ) {
-            totalPrice += value.amount * value.price;
-        });
-        $(".shopping-cart-popup-price").html('$ ' + totalPrice);
-        $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
-    }
-
-    function updateLocalStorage() {
+        console.log(JSON.stringify(cart));
         localStorage.setItem("shopping_cart", JSON.stringify(cart));
-        updateTotalPriceOnPresenter();
     }
 </script>
 

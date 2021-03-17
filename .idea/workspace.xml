@@ -63,6 +63,10 @@
       <workItem from="1613921168016" duration="3373000" />
       <workItem from="1614165802630" duration="64000" />
       <workItem from="1614431921283" duration="9569000" />
+      <workItem from="1615040285732" duration="4738000" />
+      <workItem from="1615288590264" duration="12000" />
+      <workItem from="1615288662150" duration="97000" />
+      <workItem from="1615959206044" duration="13191000" />
     </task>
     <servers />
   </component>
@@ -80,5 +84,15 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="533" y="239" key="FileChooserDialogImpl" timestamp="1615288758105">
+      <screen x="0" y="0" width="1504" height="963" />
+    </state>
+    <state x="533" y="239" key="FileChooserDialogImpl/0.0.1504.963@0.0.1504.963" timestamp="1615288758105" />
+    <state x="93" y="93" width="1319" height="777" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1615971859261">
+      <screen x="0" y="0" width="1504" height="963" />
+    </state>
+    <state x="93" y="93" width="1319" height="777" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1504.963@0.0.1504.963" timestamp="1615971859261" />
   </component>
 </project>

@@ -87,33 +87,6 @@ function uploadImage($insert_id) {
 
 if (isset($_GET["action"])) {
 
-    // Get product name and price
-    if ($_GET["action"] == 'api') {
-        if(isset($_POST['categories'])) {
-            $json = $_POST['categories'];
-            var_dump(json_decode($json, true));
-            header('Content-Type: application/json');
-            echo json_encode(array('foo' => 'bar'));
-            exit;
-        } else {
-            header('Content-Type: application/json');
-            echo json_encode(array('foo' => 'bar2'));
-            exit;
-        }
-        /*
-        $sql = "SELECT * FROM products WHERE pid='" . $_GET["pid"] . "' LIMIT 1";// LIMIT 3
-        if ($result = $link->query($sql)) {
-            while ($row = $result->fetch_row()) {
-                $pid = $row[0];
-                $catid = $row[1];
-                $name = $row[2];
-                $price = $row[3];
-                $description = $row[4];
-            }
-            $result->free_result();
-        }*/
-    }
-
     // Add product
     if ($_GET["action"] == 'add' && isset($_POST["name"])) {
         $sql = $link->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");
