@@ -81,7 +81,7 @@ function addItemOnPresenter(key, item) {
         '        <input class="form-control" id="item_' + item.id + '" min="0" type="number"\n' +
         '               value="' + item.amount + '"  onchange="onChangeItemAmount(this, ' + key + ', ' + item.id + ');">\n' +
         '    </div>\n' +
-        '    <div class="form-group col-6 text-right">$' + item.amount * item.price + '</div>\n' +
+        '    <div class="form-group col-6 text-right" id="item_' + item.id + '_price">$' + item.price + '\/each</div>\n' +
         '</div>'
     );
 }

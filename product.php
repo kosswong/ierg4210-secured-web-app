@@ -55,7 +55,7 @@ if ($result = $sql->get_result()) {
                                 <label for="amount">Amount</label>
                                 <input class="form-control btn-add-to-cart-main-amount" id="amount" min="0" type="number" value="1">
                             </div>
-                            <button type="submit" class="btn btn-warning mb-2 btn-add-to-cart" id="item-<?php echo $pid?>" data-id="<?php echo $pid?>">Add to cart</button>
+                            <button type="button" class="btn btn-warning mb-2 btn-add-to-cart" id="item-<?php echo $pid?>" data-id="<?php echo $pid?>">Add to cart</button>
                         </form>
                     </div>
                 </div>
