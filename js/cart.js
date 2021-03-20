@@ -34,6 +34,7 @@ $(document).ready(function () {
             } else {
                 itemInStorage["amount"] = parseInt(itemInStorage["amount"]) + amount;
 				$("#item_" + t.data("id")).val(itemInStorage["amount"]);
+                updateTotalPriceOnPresenter();
             }
 
             t.removeClass("disabled");
@@ -126,7 +127,7 @@ function updateTotalPriceOnPresenter() {
     $.each(cart.items, function (key, value) {
         totalPrice += value.amount * value.price;
     });
-    $(".shopping-cart-popup-price").html('$ ' + totalPrice);
+    $(".shopping-cart-popup-price").html('$ ' + totalPrice.toFixed(2));
     $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
 }
 

@@ -20,7 +20,7 @@
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary dropdown-toggle"
                         data-toggle="dropdown"
                         id="cart" type="button">
-                    Shopping List <span class="shopping-cart-popup-item-amount"></span> <span class="shopping-cart-popup-price">$4.0</span>
+                    Shopping List <span class="shopping-cart-popup-item-amount">(0)</span> <span class="shopping-cart-popup-price">$0</span>
                     <i class="fas fa-shopping-cart"></i>
                 </button>
                 <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
