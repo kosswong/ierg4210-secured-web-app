@@ -7,8 +7,8 @@ if ($conn === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
-$cat_list = ''; //Categories list
-$p_list = ''; //Product list
+$cat_list = '';     //Categories list
+$p_list = '';       //Product list
 
 // Numeric check
 $current_catid = (isset($_GET['catid']) && is_numeric($_GET['catid']) && ($_GET['catid'] > 0)) ? $_GET['catid'] : 1;
@@ -101,7 +101,7 @@ mysqli_close($conn);
             </div>
         </div>
     </div>
-</section
+</section>
 
 
 <?php require 'inc/footer.php'; ?>
