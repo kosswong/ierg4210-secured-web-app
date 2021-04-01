@@ -14,3 +14,6 @@ yum install gd gd-devel php-gd
 ### Runserver
 sudo systemctl start httpd
 Ref. https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateWebServer.html
+
+### Change Owner
+sudo chown -R ec2-user /var/www/html
