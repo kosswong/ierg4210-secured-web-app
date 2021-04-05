@@ -112,6 +112,9 @@ if (isset($_POST['email']) &&
                         "msg" => "Login successfully.",
                     ];
 
+                    header("Location: http://localhost");
+                    die();
+
                 } else {
                     $error[] = [
                         "type" => "danger",
