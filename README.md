@@ -10,6 +10,9 @@ sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
 
 yum install gd gd-devel php-gd
 
+### Requirement
+Random salt:
+`sudo apt-get install mcrypt php7.1-mcrypt`
 
 ### Runserver
 sudo systemctl start httpd
