@@ -19,11 +19,12 @@ $cart = [
     0 => ["pid" => 0, "quality" => 5, "price" => 5],
     1 => ["pid" => 1, "quality" => 5, "price" => 5],
     2 => ["pid" => 2, "quality" => 5, "price" => 5],
+    3 => ["pid" => 288888, "quality" => 5, "price" => 5],
 ];
 $cart_sanitized = [];
 
 foreach ($cart as &$item) {
-    $sql = $conn->prepare('SELECT pid, name, price FROM products WHERE pid=? LIMIT 1');
+    $sql = $conn->prepare('SELECT price FROM products WHERE pid=? LIMIT 1');
     $sql->bind_param('i', $item["pid"]);
     $sql->execute();
 
@@ -34,16 +35,22 @@ foreach ($cart as &$item) {
      *
      */
 
+    // The current price of each selected product gathered from DB
     if ($result = $sql->get_result()) {
-        while ($row = $result->fetch_array()) {
-            print_r($row);
-
-            //$cart_sanitized[] = ;
-
+        if ($row = $result->fetch_assoc()) {
+            $cart_sanitized[] = [
+                "pid" => $item["pid"],
+                "quality" => $item["quality"],
+                "price" => $row["price"],
+            ];
+        } else {
+            $error = [
+                "type" => "warning",
+                "msg" => "There exist invalid item, we already remove it.",
+            ];
         }
     }
 }
-
 
 // Server generates a digest that is composed of at least
 $digest = [
