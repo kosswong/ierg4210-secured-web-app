@@ -1,8 +1,8 @@
 <?php
 
-$username = 'Guest';
-$uid = -1;
-$role = 1;
+session_start();
+$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 ?>
 
@@ -24,10 +24,10 @@ $role = 1;
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <i class="fas fa-store-alt"></i> Welcome, <?= $username ?>!
                 <?php
-                if ($uid == -1) {
+                if ($userid == -1) {
                     echo "<a href='login.php'>Login</a>";
                 } else {
-                    echo "<a href='login.php?logout=true'>Logout</a>";
+                    echo "<a href='login.php?action=logout'>Logout</a>";
                 }
                 ?>
             </a>
