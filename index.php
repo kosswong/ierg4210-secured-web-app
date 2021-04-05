@@ -1,14 +1,10 @@
-<?php require 'inc/header.php'; ?>
-
 <?php
-// Connect mySQL
-$conn = mysqli_connect("localhost", "root", "", "test");
-if ($conn === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
-}
+require 'inc/config.inc.php';
+require_header();
+$db = DB();
 
-$cat_list = '';     //Categories list
-$p_list = '';       //Product list
+$cat_list = '';
+$p_list = '';
 
 // Numeric check
 $current_catid = (isset($_GET['catid']) && is_numeric($_GET['catid']) && ($_GET['catid'] > 0)) ? $_GET['catid'] : 1;
@@ -16,14 +12,14 @@ $current_catname = '';
 
 // Attempt select query execution
 $sql_cat = "SELECT * FROM categories";
-if ($result = mysqli_query($conn, $sql_cat)) {
+if ($result = mysqli_query($db, $sql_cat)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_array($result)) {
             if ($current_catid == $row['catid']) {
                 $current_catname = $row['name'];
 
                 // Prevent SQL injection
-                $query = $conn->prepare('SELECT * FROM products WHERE catid = ?');
+                $query = $db->prepare('SELECT * FROM products WHERE catid = ?');
                 $query->bind_param('i', $current_catid); // 'i' specifies the variable type => 'integer'
                 $query->execute();
 
@@ -49,7 +45,7 @@ Add to cart</button>'
                         $p_list = "No records matching your query were found.";
                     }
                 } else {
-                    echo "ERROR: Could not able to execute $sql_cat. " . mysqli_error($conn);
+                    echo "ERROR: Could not able to execute $sql_cat. " . mysqli_error($db);
                 }
 
             }
@@ -62,11 +58,11 @@ Add to cart</button>'
         $cat_list = "No records matching your query were found.";
     }
 } else {
-    echo "ERROR: Could not able to execute $sql_cat. " . mysqli_error($conn);
+    echo "ERROR: Could not able to execute $sql_cat. " . mysqli_error($db);
 }
 
 // Close connection
-mysqli_close($conn);
+mysqli_close($db);
 ?>
 
 <main class="container">
@@ -104,4 +100,4 @@ mysqli_close($conn);
 </section>
 
 
-<?php require 'inc/footer.php'; ?>
+<?php require_footer(); ?>

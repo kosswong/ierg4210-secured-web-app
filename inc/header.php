@@ -1,6 +1,12 @@
 <?php
+if (!defined('IERG4210')){
+    header('HTTP/1.0 403 Forbidden');
+    exit;
+}
+?>
 
-session_start();
+<?php
+
 $userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
@@ -25,9 +31,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                 <i class="fas fa-store-alt"></i> Welcome, <?= $username ?>!
                 <?php
                 if ($userid == -1) {
-                    echo "<a href='login.php'>Login</a>";
+                    echo "<a href='user.php'>Login</a>";
                 } else {
-                    echo "<a href='change_password.php'>Change Password</a> | <a href='login.php?action=logout'>Logout</a>";
+                    echo "<a href='change_password.php'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
                 }
                 ?>
             </a>
