@@ -27,7 +27,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                 if ($userid == -1) {
                     echo "<a href='login.php'>Login</a>";
                 } else {
-                    echo "<a href='login.php?action=logout'>Logout</a>";
+                    echo "<a href='change_password.php'>Change Password</a> | <a href='login.php?action=logout'>Logout</a>";
                 }
                 ?>
             </a>
