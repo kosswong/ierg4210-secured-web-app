@@ -1,16 +1,12 @@
 <?php
 require 'inc/config.inc.php';
-require_header();
 $db = DB();
 $error = [];
-?>
-
-<?php
 
 if (auth()) {
-    echo "test";
+    //echo "test";
 } else {
-    echo "test2";
+    //echo "test2";
 }
 
 if (isset($_REQUEST['action'])) {
@@ -26,8 +22,8 @@ if (isset($_REQUEST['action'])) {
             }
             break;
         case 'login':
-            if (isset($_POST['action']) && isset($_POST['email']) && isset($_POST['password'])) {
-                user_login($_POST['email'], $_POST['password']);
+            if (isset($_POST['action']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['nonce'])) {
+                user_login($_POST['email'], $_POST['password'], $_POST['nonce']);
             }
             break;
         case 'change_password':
@@ -60,71 +56,81 @@ function user_logout()
     }
 }
 
-function user_login($email, $password)
+function user_login($email, $password, $nonce)
 {
-    $db = DB();
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error[] = ["type" => "warning", "msg" => "Invalid email format",];
-    } else if (!empty($_POST["password"]) && $_POST["password"]) {
-        if (strlen($_POST["password"]) <= '8') {
-            $passwordErr = "Your Password Must Contain At Least 8 Characters!";
-        } elseif (!preg_match("#[0-9]+#", $password)) {
-            $passwordErr = "Your Password Must Contain At Least 1 Number!";
-        } elseif (!preg_match("#[A-Z]+#", $password)) {
-            $passwordErr = "Your Password Must Contain At Least 1 Capital Letter!";
-        } elseif (!preg_match("#[a-z]+#", $password)) {
-            $passwordErr = "Your Password Must Contain At Least 1 Lowercase Letter!";
-        }
-    } else if (!empty($_POST["password"])) {
-        $error[] = ["type" => "warning", "msg" => "Please Check You've Entered Your Password!",];
-    } else {
-        $error[] = ["type" => "warning", "msg" => "Please enter password.",];
-    }
-
-    if ($_POST['action'] == 'login') {
-        $sql = $db->prepare('SELECT admin, userid, email, password, salt FROM users WHERE email=? LIMIT 1');
-        $sql->bind_param('s', $email);
-        $sql->execute();
-
-        if ($result = $sql->get_result()) {
-            if ($row = $result->fetch_assoc()) {
-                if ($row['password'] == hash_hmac('sha1', $password, $row['salt'])) {
-
-                    $exp = time() + 3600 * 24 * 3;
-                    $token = [
-                        'em' => $row['email'],
-                        'exp' => $exp,
-                        'k' => hash_hmac('sha1', $exp . $row['password'], $row['salt'])
-                    ];
-                    setcookie('auth', json_encode($token), $exp, '/', 'localhost', true, true);
-
-                    if ($row['admin'] == 1) $_SESSION['admin'] = $row['admin'];
-                    $_SESSION['username'] = $row['email'];
-                    $_SESSION['userid'] = $row['userid'];
-                    $_SESSION['auth'] = $token;
-                    session_regenerate_id();
-
-                    $error[] = [
-                        "type" => "success",
-                        "msg" => "Login successfully.",
-                    ];
-
-                    header("Location: http://localhost");
-                    die();
-
-                } else {
-                    $error[] = [
-                        "type" => "danger",
-                        "msg" => "Login fail: wrong password.",
-                    ];
+    try {
+        if (csrf_verifyNonce($_POST['action'], $_POST['nonce']) == true) {
+            $db = DB();
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error[] = ["type" => "warning", "msg" => "Invalid email format",];
+            } else if (!empty($_POST["password"]) && $_POST["password"]) {
+                if (strlen($_POST["password"]) <= '8') {
+                    $passwordErr = "Your Password Must Contain At Least 8 Characters!";
+                } elseif (!preg_match("#[0-9]+#", $password)) {
+                    $passwordErr = "Your Password Must Contain At Least 1 Number!";
+                } elseif (!preg_match("#[A-Z]+#", $password)) {
+                    $passwordErr = "Your Password Must Contain At Least 1 Capital Letter!";
+                } elseif (!preg_match("#[a-z]+#", $password)) {
+                    $passwordErr = "Your Password Must Contain At Least 1 Lowercase Letter!";
                 }
+            } else if (!empty($_POST["password"])) {
+                $error[] = ["type" => "warning", "msg" => "Please Check You've Entered Your Password!",];
             } else {
-                $error[] = [
-                    "type" => "warning",
-                    "msg" => "Login fail: no related record.",
-                ];
+                $error[] = ["type" => "warning", "msg" => "Please enter password.",];
             }
+
+            if ($_POST['action'] == 'login') {
+                $sql = $db->prepare('SELECT admin, userid, email, password, salt FROM users WHERE email=? LIMIT 1');
+                $sql->bind_param('s', $email);
+                $sql->execute();
+
+                if ($result = $sql->get_result()) {
+                    if ($row = $result->fetch_assoc()) {
+                        if ($row['password'] == hash_hmac('sha1', $password, $row['salt'])) {
+
+                            $exp = time() + 3600 * 24 * 3;
+                            $token = [
+                                'em' => $row['email'],
+                                'exp' => $exp,
+                                'k' => hash_hmac('sha1', $exp . $row['password'], $row['salt'])
+                            ];
+                            setcookie('auth', json_encode($token), $exp, '/', 'localhost', true, true);
+
+                            if ($row['admin'] == 1) $_SESSION['admin'] = $row['admin'];
+                            $_SESSION['username'] = $row['email'];
+                            $_SESSION['userid'] = $row['userid'];
+                            $_SESSION['auth'] = $token;
+                            session_regenerate_id();
+
+                            $error[] = [
+                                "type" => "success",
+                                "msg" => "Login successfully.",
+                            ];
+
+                            header("Location: http://localhost");
+                            die();
+
+                        } else {
+                            $error[] = [
+                                "type" => "danger",
+                                "msg" => "Login fail: wrong password.",
+                            ];
+                        }
+                    } else {
+                        $error[] = [
+                            "type" => "warning",
+                            "msg" => "Login fail: no related record.",
+                        ];
+                    }
+                }
+            }
+        }else{
+            header('HTTP/1.0 403 Forbidden');
+            exit;
         }
+    } catch (Exception $e) {
+        header('HTTP/1.0 403 Forbidden');
+        exit;
     }
 }
 
@@ -206,10 +212,12 @@ function user_change_password($password, $password_new)
     }
 }
 
+require_header();
 ?>
 
     <form class="form-signin" method="post">
         <input type="hidden" name="action" value="login">
+        <input type="hidden" name="nonce" value="<?= csrf_getNonce('login') ?>">
 
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
