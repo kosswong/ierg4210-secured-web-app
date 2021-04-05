@@ -43,7 +43,6 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                 <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
 
 
-
                     <form action="https://api-3t.sandbox.paypal.com/nvp" method="POST">
                         <input type="hidden" name="USER" value="sb-ilppj5823378@personal.example.com">
                         <input type="hidden" name="PWD" value="yL%!h&4/">
@@ -61,4 +60,13 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
             </div>
         </div>
     </div>
+    <?php
+    if (isset($_SESSION['msg_type']) && isset($_SESSION['msg_content'])) {
+        ?>
+        <div class="alert alert-<?= $_SESSION['msg_type'] ?>" role="alert">
+            <?= $_SESSION['msg_content'] ?>
+        </div>
+        <?php
+    }
+    ?>
 </header>

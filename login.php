@@ -49,11 +49,11 @@ if(isset($_GET['action']) && ($_GET['action'] == 'logout')){
         session_start();
         $_SESSION['username'] = 'Guest';
         $_SESSION['userid'] = -1;
+        $_SESSION['msg_type'] = "success";
+        $_SESSION['msg_content'] = "Logout successfully.";
 
-        $error[] = [
-            "type" => "success",
-            "msg" => "Logout successfully.",
-        ];
+        header("Location: http://localhost");
+        die();
     }
 }
 
