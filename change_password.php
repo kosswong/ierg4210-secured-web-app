@@ -60,6 +60,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'change_password') {
 
 }
 
+
+
 ?>
     <form class="form-signin" method="post">
         <input type="hidden" name="action" value="change_password">

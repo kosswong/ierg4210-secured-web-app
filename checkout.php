@@ -109,7 +109,7 @@ if (sizeof($cart) > 0) {
             'charset' => 'utf-8',
             'return'        => 'http://localhost/checkout_success.php',
             'cancel_return' => 'https://domain.com/cancel',
-            'notify_url'    => 'http://localhost/verify.php'
+            'notify_url'    => 'http://localhost/checkout_verify.php'
         ];
 
         foreach ($cart_sanitized as $key => $item) {
