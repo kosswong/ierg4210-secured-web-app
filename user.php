@@ -30,6 +30,11 @@ if (isset($_REQUEST['action'])) {
                 user_login($_POST['email'], $_POST['password']);
             }
             break;
+        case 'change_password':
+            if (isset($_POST['action']) && isset($_POST['password']) && isset($_POST['password_new'])) {
+                user_change_password();
+            }
+            break;
     }
 }
 
@@ -148,6 +153,58 @@ function user_register()
     }
 }
 
+function user_change_password($password, $password_new)
+{
+    $db = DB();
+    $password = $_POST['password'];
+    $password_new = $_POST['password_new'];
+
+    $sql = $db->prepare('SELECT password, salt FROM users WHERE email=? LIMIT 1');
+    $sql->bind_param('s', $_SESSION['username']);
+    $sql->execute();
+
+    if ($result = $sql->get_result()) {
+        if ($row = $result->fetch_assoc()) {
+            if ($row['password'] == hash_hmac('sha1', $password, $row['salt'])) {
+
+                try {
+                    $salt = bin2hex(random_bytes(8));
+                } catch (Exception $e) {
+                    $salt = bin2hex("IERG4210");
+                    $error[] = [
+                        "type" => "server",
+                        "msg" => "Cannot use random_bytes() function, used without it.",
+                    ];
+                }
+
+                $password_new = hash_hmac('sha1', $_POST['password_new'], $salt);
+
+                $sql = "UPDATE users SET password='$password_new', salt='$salt' WHERE email='{$_SESSION['username']}'";
+                if ($db->query($sql) === TRUE) {
+                    echo "New record created successfully";
+                } else {
+                    echo "Error: " . $sql . "<br>" . $db->error;
+                }
+
+                $error[] = [
+                    "type" => "success",
+                    "msg" => "Change successfully.",
+                ];
+
+            } else {
+                $error[] = [
+                    "type" => "danger",
+                    "msg" => "Login fail: wrong password.",
+                ];
+            }
+        } else {
+            $error[] = [
+                "type" => "warning",
+                "msg" => "Login fail: no related record.",
+            ];
+        }
+    }
+}
 
 ?>
 
