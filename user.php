@@ -238,4 +238,4 @@ require_header();
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in / Register</button>
     </form>
 
-<?php require 'inc/footer.php'; ?>
+<?php require_footer(); ?>
