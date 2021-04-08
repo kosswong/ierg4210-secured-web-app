@@ -2,6 +2,7 @@
 
 defined('IERG4210') or define('IERG4210', 'WhySoChur');
 
+session_set_cookie_params(0, '/', 'localhost', true, true);
 session_start();
 
 function DB()
@@ -51,8 +52,11 @@ function csrf_getNonce($action){
 }
 
 function csrf_verifyNonce($action, $receivedNonce){
+    if(!isset($_SESSION['csrf_nonce'][$action])){
+        return false;
+    }
     if(isset($receivedNonce) && $_SESSION['csrf_nonce'][$action] == $receivedNonce){
-        if($_SESSION['authtoken']==null){
+        if(!isset($_SESSION['authtoken']) || $_SESSION['authtoken'] == null){
             unset($_SESSION['csrf_nonce'][$action]);
         }
         return true;

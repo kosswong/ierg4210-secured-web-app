@@ -31,9 +31,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                 <i class="fas fa-store-alt"></i> Welcome, <?= $username ?>!
                 <?php
                 if ($userid == -1) {
-                    echo "<a href='user.php'>Login</a>";
+                    echo "<a href='user.php?action=login'>Login</a> | <a href='user.php?action=register'>Register</a>";
                 } else {
-                    echo "<a href='change_password.php'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
+                    echo "<a href='user.php?action=password'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
                 }
                 ?>
             </a>

@@ -99,5 +99,5 @@ Add:<br>
     <input type="submit" value="Submit">
 </form>
 
-<a href='../admin/products.php'>Edit Products</a> |
+<a href='products.php'>Edit Products</a> |
 <a href='../index.php'>Home</a>
