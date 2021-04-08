@@ -1,16 +1,13 @@
 <?php
-require 'inc/header.php';
-
-$conn = mysqli_connect("localhost", "root", "", "test");
-if ($conn === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
-}
+require 'inc/config.inc.php';
+require_header();
 
 // Numeric check
 $pid = (isset($_GET['pid']) && is_numeric($_GET['pid']) && ($_GET['pid'] > 0)) ? $_GET['pid'] : 1;
 
 // Prevent SQL injection
-$sql = $conn->prepare('SELECT products.*, categories.name as cname FROM products JOIN categories ON products.catid = categories.catid WHERE pid=? LIMIT 1');
+$db = DB();
+$sql = $db->prepare('SELECT products.*, categories.name as cname FROM products JOIN categories ON products.catid = categories.catid WHERE pid=? LIMIT 1');
 $sql->bind_param('i', $pid); // 'i' specifies the variable type => 'integer'
 $sql->execute();
 

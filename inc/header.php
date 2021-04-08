@@ -3,13 +3,8 @@ if (!defined('IERG4210')){
     header('HTTP/1.0 403 Forbidden');
     exit;
 }
-?>
 
-<?php
-
-$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
-
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 ?>
 
 <!doctype html>
@@ -18,9 +13,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>eCommerce System</title>
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/fontawesome.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/fontawesome.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
 </head>
 
 <body>
@@ -28,9 +23,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <div class="navbar navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
-                <i class="fas fa-store-alt"></i> Welcome, <?= $username ?>!
+                Welcome, <?= $email ? $email : 'Guest' ?>!
                 <?php
-                if ($userid == -1) {
+                if (!$email) {
                     echo "<a href='user.php?action=login'>Login</a> | <a href='user.php?action=register'>Register</a>";
                 } else {
                     echo "<a href='user.php?action=password'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
@@ -50,8 +45,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 
                     <form action="https://api-3t.sandbox.paypal.com/nvp" method="POST">
-                        <input type="hidden" name="USER" value="sb-ilppj5823378@personal.example.com">
-                        <input type="hidden" name="PWD" value="yL%!h&4/">
+                        <input type="hidden" name="nonce" value="<?= csrf_getNonce('shop') ?>">
                         <div class="container shopping-list">
                             <div id="shopping-list">
                             </div>
@@ -66,13 +60,11 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
             </div>
         </div>
     </div>
-    <?php
-    if (isset($_SESSION['msg_type']) && isset($_SESSION['msg_content'])) {
-        ?>
-        <div class="alert alert-<?= $_SESSION['msg_type'] ?>" role="alert">
-            <?= $_SESSION['msg_content'] ?>
-        </div>
-        <?php
-    }
-    ?>
 </header>
+
+<div class="container">
+    <?php if (isset($_SESSION['msg']) && isset($_SESSION['msg']['type']) && isset($_SESSION['msg']['content'])) { ?>
+        <div class="alert alert-<?= $_SESSION['msg']['type'] ?>" role="alert">
+            <?= $_SESSION['msg']['content'] ?>
+        </div>
+    <?php } ?>

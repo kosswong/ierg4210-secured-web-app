@@ -1,7 +1,6 @@
 <?php
 require 'inc/config.inc.php';
 require_header();
-$db = DB();
 
 $cat_list = '';
 $p_list = '';
@@ -11,6 +10,7 @@ $current_catid = (isset($_GET['catid']) && is_numeric($_GET['catid']) && ($_GET[
 $current_catname = '';
 
 // Attempt select query execution
+$db = DB();
 $sql_cat = "SELECT * FROM categories";
 if ($result = mysqli_query($db, $sql_cat)) {
     if (mysqli_num_rows($result) > 0) {

@@ -1,12 +1,14 @@
 <?php
-if (!defined('IERG4210')){
+if (!defined('IERG4210')) {
     header('HTTP/1.0 403 Forbidden');
     exit;
 }
 ?>
 
+
+</div>
 <footer class="container">
-    <p>Auth: Wong Keng Lam 2021 <?=(isset($_SESSION['cpanel']) && $_SESSION['cpanel'] == 1) ? " | <a href='../admin/categories.php'>Admin</a></p>" : ''?>
+    <p>Auth: Wong Keng Lam
 </footer>
 
 <script src="js/jquery.js"></script>
