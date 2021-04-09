@@ -1,5 +1,5 @@
 <?php
-if (!defined('IERG4210ADMIN')){
+if (!defined('IERG4210ADMIN')) {
     header('HTTP/1.0 403 Forbidden');
     exit;
 }
@@ -23,7 +23,7 @@ if (!defined('IERG4210ADMIN')){
                 </tr>
                 </thead>
                 <tbody>
-                <?php if (isset($categories)) {
+                <?php if (isset($categories) && isset($count) && $count > 0) {
                     while ($row = mysqli_fetch_array($categories)) {
                         ?>
                         <tr>
@@ -36,6 +36,8 @@ if (!defined('IERG4210ADMIN')){
                             </td>
                         </tr>
                     <?php }
+                } else {
+                    echo "<tr><td colspan='4'>No records matching your query were found.</td></tr>";
                 } ?>
                 </tbody>
             </table>

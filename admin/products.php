@@ -18,15 +18,11 @@ function product_main()
 {
     $db = DB();
     $sql = "SELECT * FROM products";// LIMIT 3
-    if ($result = mysqli_query($db, $sql)) {
-        if (mysqli_num_rows($result) > 0) {
-            $products = $result;
-            $categories = get_category();
-            require 'view/product_main.php';
-            mysqli_free_result($result);
-        } else {
-            echo "No records matching your query were found.";
-        }
+    if ($products = mysqli_query($db, $sql)) {
+        $categories = get_category();
+        $count = mysqli_num_rows($products);
+        require 'view/product_main.php';
+        mysqli_free_result($products);
     } else {
         echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
     }
@@ -62,23 +58,30 @@ function product_save($pid, $nonce)
             $sql = $db->prepare("UPDATE products SET name=?, catid=?, price=?, description=? WHERE pid=?");
             $sql->bind_param('sidsi', $_POST["name"], $_POST["catid"], $_POST["price"], $_POST["description"], $pid);
             if ($sql->execute() === TRUE) {
-                echo "Record updated successfully";
+                $message_type = 'success';
+                $message = "Record updated successfully.";
                 if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
                     $imageFileType = uploadImage($pid);
                     if ($imageFileType) {
                         $sql = "UPDATE products SET image='" . $pid . '.' . $imageFileType . "' WHERE pid='" . $pid . "'";
                         if ($db->query($sql) === TRUE) {
-                            echo "Record updated successfully";
+                            $message .= " Image updated successfully";
                         }
                     }
                 }
             } else {
-                echo "Error updating record: " . $db->error;
+                $message_type = 'danger';
+                $message = "Error updating record: " . $db->error;
             }
+        } else {
+            $message_type = 'warning';
+            $message = "Invalid operation.";
         }
     } catch (Exception $e) {
-        echo "Bad session.";
+        $message_type = 'warning';
+        $message = "Bad session.";
     }
+    require 'view/message.php';
 }
 
 function product_delete($pid)
@@ -86,19 +89,29 @@ function product_delete($pid)
     $db = DB();
     $sql = $db->prepare("DELETE FROM `products` WHERE pid=?");
     $sql->bind_param('i', $pid);
-    $message = ($sql->execute() === TRUE) ? "Deleted!" : "Error: " . $sql . "<br>" . $db->error;
+    if ($sql->execute() === TRUE) {
+        $message_type = 'success';
+        $message = "Deleted!";
+    } else {
+        $message_type = 'danger';
+        $message = "Error updating record: " . $db->error;
+    }
     require 'view/message.php';
 }
 
-function product_add_confirm()
+function product_add_confirm($catid, $name, $price, $description)
 {
+    $catid = intval($catid);
+    $name = htmlspecialchars(strip_tags($name));
+    $catid = floatval($catid);
+    $description = htmlspecialchars(strip_tags($description));
+
     $db = DB();
-    $message = '';
-    $sql = $db->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");
-    $sql->bind_param('isds', $_POST["catid"], $_POST["name"], $_POST["price"], $_POST["description"]);
+    $sql = $db->prepare("INSERT INTO products (pid, catid, name, price, description) VALUES (NULL, ?, ?, ?, ?)");
+    $sql->bind_param('isds', $catid, $name, $price, $description);
     if ($sql->execute() === TRUE) {
         $insert_id = $sql->insert_id;
-        $message .= "New record created successfully";
+        $message = "New record created successfully";
         if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
             $imageFileType = uploadImage($insert_id);
             if ($imageFileType) {
@@ -109,7 +122,7 @@ function product_add_confirm()
             }
         }
     } else {
-        $message .= "Error: " . $sql . "<br>" . $db->error;
+        $message = "Error: " . $sql . "<br>" . $db->error;
     }
     require 'view/message.php';
 }
@@ -138,7 +151,7 @@ if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
         case 'add':
             if (isset($_POST["catid"]) && isset($_POST["name"]) && isset($_POST["price"]) && isset($_POST["description"])) {
-                product_add_confirm();
+                product_add_confirm($_POST["catid"], $_POST["name"], $_POST["price"], $_POST["description"]);
             } else {
                 product_add();
             }

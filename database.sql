@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
                               `catid` int(11) NOT NULL,
                               `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -20,26 +21,7 @@ INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
 (13, 'Clothing, Sports & Outdoors', '服裝, 運動及戶外用品'),
 (14, 'Books, Gifts&Festive Products', '書籍、禮品及節日產品');
 
-CREATE TABLE `products` (
-  `pid` int(11) NOT NULL,
-  `catid` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` double NOT NULL DEFAULT 0,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `banding` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `origin` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `capacity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`, `banding`, `origin`, `capacity`, `image`) VALUES
-(1, 1, 'KOONUNGA HILL SHZ CAB', 80, 'Contains sulphites 14.5% ALC/VOL\r\nProduced with the aid of egg and milk products and traces may remain', 'PENFOLDS', 'Australia', '37.5CL', '1.jpg'),
-(2, 1, 'ROSSI CALIFORNIA RED', 129, 'Keep in a cool and dry place and avoid direct sunlight.', 'CARLO ROSSI', 'United States', '3L', '2.jpg'),
-(3, 2, 'Turkey Luncheon Meat', 26.9, 'Contain 3g fat per 100g, Store in a cool and dry place, avoid direct sunlight.', 'APIS', 'Spain', '220G', '3.jpg'),
-(4, 2, 'Green Dot Dot Organic Laver', 23.9, 'Once opened, please keep refrigerated and keep away from high temperature and humid conditions. Please consume as soon as possible after opening.', 'GREEN DOT DOT ', 'China', '33G', '4.jpg'),
-(5, 2, 'THAI HOM MALI RICE', 23.9, 'Eat rice is good', 'SILVERSPOON', 'Thailand', '1KG', '5.jpg'),
-(6, 2, 'ORGANIC KETCHUP', 32.5, 'Approved by the United States Department of Agriculture (USDA), 100% manufactured by organic tomatoes. The manufacture process is strictly monitored. We ensure the tomatoes are of the highest standard starting from seeding, harvest till production.', 'HEINZ ', 'USA', '14OZ', '6.jpg');
-
+DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
                           `id` int(11) UNSIGNED NOT NULL,
                           `uid` int(11) NOT NULL,
@@ -51,6 +33,28 @@ CREATE TABLE `orders` (
                           `completed` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
+                            `pid` int(11) NOT NULL,
+                            `catid` int(11) NOT NULL,
+                            `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                            `price` double NOT NULL DEFAULT 0,
+                            `description` text COLLATE utf8_unicode_ci NOT NULL,
+                            `banding` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                            `origin` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                            `capacity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                            `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`, `banding`, `origin`, `capacity`, `image`) VALUES
+(1, 1, 'KOONUNGA HILL SHZ CAB', 80, 'Contains sulphites 14.5% ALC/VOL\r\nProduced with the aid of egg and milk products and traces may remain', 'PENFOLDS', 'Australia', '37.5CL', '1.jpg'),
+(2, 1, 'ROSSI CALIFORNIA RED', 129, 'Keep in a cool and dry place and avoid direct sunlight.', 'CARLO ROSSI', 'United States', '3L', '2.jpg'),
+(3, 2, 'Turkey Luncheon Meat', 26.9, 'Contain 3g fat per 100g, Store in a cool and dry place, avoid direct sunlight.', 'APIS', 'Spain', '220G', '3.jpg'),
+(4, 2, 'Green Dot Dot Organic Laver', 23.9, 'Once opened, please keep refrigerated and keep away from high temperature and humid conditions. Please consume as soon as possible after opening.', 'GREEN DOT DOT ', 'China', '33G', '4.jpg'),
+(5, 2, 'THAI HOM MALI RICE', 23.9, 'Eat rice is good', 'SILVERSPOON', 'Thailand', '1KG', '5.jpg'),
+(6, 2, 'ORGANIC KETCHUP', 32.5, 'Approved by the United States Department of Agriculture (USDA), 100% manufactured by organic tomatoes. The manufacture process is strictly monitored. We ensure the tomatoes are of the highest standard starting from seeding, harvest till production.', 'HEINZ ', 'USA', '14OZ', '6.jpg');
+
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
                          `userid` int(255) UNSIGNED NOT NULL,
                          `admin` int(11) NOT NULL,
@@ -64,6 +68,10 @@ CREATE TABLE `users` (
                          `expried` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `users` (`userid`, `admin`, `email`, `name`, `password`, `salt`, `verified`, `ip`, `token`, `expried`) VALUES
+(1, 1, 'test@test.com', '', 'e630e9a1dacee47939f6f6eafb481c5b613be815', '067f4b336ca73441', 0, '::1', '', '0000-00-00');
+
+DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
                               `id` int(11) NOT NULL,
                               `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
@@ -74,11 +82,6 @@ INSERT INTO `user_roles` (`id`, `role`) VALUES
 (2, 'editor'),
 (3, 'user');
 
-ALTER TABLE `categories`
-    ADD PRIMARY KEY (`catid`);
-
-ALTER TABLE `products`
-    ADD PRIMARY KEY (`pid`);
 
 ALTER TABLE `categories`
     ADD PRIMARY KEY (`catid`);
@@ -94,6 +97,7 @@ ALTER TABLE `users`
     ADD PRIMARY KEY (`userid`),
   ADD UNIQUE KEY `email` (`email`);
 
+
 ALTER TABLE `categories`
     MODIFY `catid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
@@ -101,8 +105,8 @@ ALTER TABLE `orders`
     MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 ALTER TABLE `products`
-    MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+    MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 ALTER TABLE `users`
-    MODIFY `userid` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+    MODIFY `userid` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;

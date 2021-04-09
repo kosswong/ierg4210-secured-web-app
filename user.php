@@ -1,5 +1,6 @@
 <?php
 require 'inc/config.inc.php';
+unset($_SESSION['4210SHOP']);
 
 function user_logout($custom_message = '')
 {
@@ -26,7 +27,7 @@ function user_login($email, $password, $nonce)
 {
     try {
         if (csrf_verifyNonce('login', $nonce) == true) {
-            if ((validatePassword($password) != false) || (validateEmail($email, true) != false)) {
+            if ((validatePassword($password) !== false) || (validateEmail($email, true) !== false)) {
                 $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email, true) . validatePassword($_POST["password"])];
                 return;
             } else {
@@ -84,7 +85,7 @@ function user_register($email, $password, $nonce)
 {
     try {
         if (csrf_verifyNonce('register', $nonce) == true) {
-            if ((validatePassword($password) != false) || (validateEmail($email) != false)) {
+            if ((validatePassword($password) !== false) || (validateEmail($email) !== false)) {
                 $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email) . validatePassword($_POST["password"])];
                 return;
             } else {
@@ -113,8 +114,11 @@ function user_change_password($password, $password_new, $nonce)
     $email = $_SESSION['email'];
     try {
         if (csrf_verifyNonce('password', $nonce) == true) {
-            if (validatePassword($password) != false) {
+            if (validatePassword($password) !== false) {
                 $_SESSION['msg'] = ['type' => 'danger', 'content' => validatePassword($password)];
+                return;
+            } else if (validatePassword($password_new) !== false) {
+                $_SESSION['msg'] = ['type' => 'warning', 'content' => validatePassword($password_new)];
                 return;
             } else {
                 $db = DB();
@@ -124,9 +128,9 @@ function user_change_password($password, $password_new, $nonce)
 
                 if ($result = $sql->get_result()) {
                     if ($row = $result->fetch_assoc()) {
-                        if ($row['password'] == hash_hmac('sha1', $password, $row['salt'])) {
+                        if ($row['password'] == hash_hmac('sha1', $password . "IERG4210", $row['salt'] . "IERG4210")) {
                             $salt = generate_salt();
-                            $password_new_encrypted = hash_hmac('sha1', $password_new, $salt);
+                            $password_new_encrypted = hash_hmac('sha1', $password_new . "IERG4210", $salt . "IERG4210");
                             $sql = "UPDATE users SET password='$password_new_encrypted', salt='$salt' WHERE email='$email'";
                             if ($db->query($sql) === TRUE) {
                                 user_logout("New record created successfully.");
@@ -141,6 +145,8 @@ function user_change_password($password, $password_new, $nonce)
                     }
                 }
             }
+        } else {
+            $_SESSION['msg'] = ['type' => 'warning', 'content' => 'Invalid operation.'];
         }
     } catch (Exception $e) {
         $_SESSION['msg'] = ['type' => 'info', 'content' => 'Bad session.'];

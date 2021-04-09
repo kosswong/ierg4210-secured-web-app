@@ -12,15 +12,11 @@ function category_main()
     $db = DB();
     $sql = "SELECT * FROM categories";// LIMIT 3
     if ($categories = mysqli_query($db, $sql)) {
-        if (mysqli_num_rows($categories) > 0) {
+            $count = mysqli_num_rows($categories);
             require 'view/category_main.php';
             mysqli_free_result($categories);
-        } else {
-            echo "No records matching your query were found.";
-        }
     } else {
-        $message_type = 'danger';
-        $message = "ERROR: Could not able to execute $sql. " . mysqli_error($db);
+        echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
     }
 }
 
@@ -53,6 +49,7 @@ function category_add($name, $cname, $nonce)
         $message_type = 'warning';
         $message = "Bad session.";
     }
+    require 'view/message.php';
 }
 
 function category_edit($cad_id)

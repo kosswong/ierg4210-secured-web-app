@@ -27,7 +27,7 @@ if (!defined('IERG4210ADMIN')){
                 </tr>
                 </thead>
                 <tbody>
-                <?php if (isset($products) && isset($categories)) {
+                <?php if (isset($products) && isset($categories) && isset($count) && $count > 0) {
                     while ($row = mysqli_fetch_array($products)) {
                         ?>
                         <tr>
@@ -43,6 +43,8 @@ if (!defined('IERG4210ADMIN')){
                             </td>
                         </tr>
                     <?php }
+                }else{
+                    echo "<tr><td colspan='7'>No records matching your query were found.</td></tr>";
                 } ?>
                 </tbody>
             </table>
