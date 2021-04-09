@@ -44,34 +44,11 @@ $(document).ready(function () {
         updateLocalStorage();
     });
 
-});
-
-
-function retrieveDetailFromServer(itemId, amount = 1) {
-    $.ajax({
-        type: 'POST',
-        url: 'admin/products.php?action=api',
-        dataType: 'json',
-        data: {
-            id: itemId,
-            amount: amount,
-        },
-        success: function (msg) {
-            let newItem = ({
-                id: itemId,
-                name: msg.name,
-                price: msg.price,
-                amount: amount,
-                addAt: $.now()
-            });
-            cart.items.push(newItem);
-            let key = itemExistInStorage(cart.items, itemId, true);
-            addItemOnPresenter(key, newItem);
-			updateLocalStorage();
-        }
+    $("#register_email").change(function(){
+        validateRegisterEmail($(this).val());
     });
-}
 
+});
 
 function addItemOnPresenter(key, item) {
     $("#shopping-list").append(
@@ -135,4 +112,81 @@ function updateTotalPriceOnPresenter() {
 function updateLocalStorage() {
     localStorage.setItem("shopping_cart", JSON.stringify(cart));
     updateTotalPriceOnPresenter();
+}
+
+
+function retrieveDetailFromServer(itemId, amount = 1) {
+    $.ajax({
+        type: 'POST',
+        url: 'inc/api.php?action=validate_cart',
+        dataType: 'json',
+        data: {
+            id: itemId,
+            amount: amount,
+        },
+        success: function (msg) {
+            let newItem = ({
+                id: itemId,
+                name: msg.name,
+                price: msg.price,
+                amount: amount,
+                addAt: $.now()
+            });
+            cart.items.push(newItem);
+            let key = itemExistInStorage(cart.items, itemId, true);
+            addItemOnPresenter(key, newItem);
+            updateLocalStorage();
+        }
+    });
+}
+
+
+function validateLoginPassword() {
+    $.ajax({
+        type: 'POST',
+        url: 'inc/api.php?action=validate_password',
+        dataType: 'json',
+        data: {
+            id: itemId,
+            amount: amount,
+        },
+        success: function (msg) {
+            let newItem = ({
+                id: itemId,
+                name: msg.name,
+                price: msg.price,
+                amount: amount,
+                addAt: $.now()
+            });
+            cart.items.push(newItem);
+            let key = itemExistInStorage(cart.items, itemId, true);
+            addItemOnPresenter(key, newItem);
+            updateLocalStorage();
+        }
+    });
+}
+
+function validateRegisterEmail(){
+    $.ajax({
+        type: 'POST',
+        url: 'inc/api.php?action=validate_register_email',
+        dataType: 'json',
+        data: {
+            id: itemId,
+            amount: amount,
+        },
+        success: function (msg) {
+            let newItem = ({
+                id: itemId,
+                name: msg.name,
+                price: msg.price,
+                amount: amount,
+                addAt: $.now()
+            });
+            cart.items.push(newItem);
+            let key = itemExistInStorage(cart.items, itemId, true);
+            addItemOnPresenter(key, newItem);
+            updateLocalStorage();
+        }
+    });
 }

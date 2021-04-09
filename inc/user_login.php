@@ -11,12 +11,12 @@ if (!defined('IERG4210')) {
     <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
-        <input type="email" name="email" class="form-control" aria-describedby="emailHelp"
+        <input type="email" id="login_email" name="email" class="form-control" aria-describedby="emailHelp"
                placeholder="Enter email">
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input type="password" name="password" class="form-control" placeholder="Password">
+        <input type="password" id="login_password" name="password" class="form-control" placeholder="Password">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

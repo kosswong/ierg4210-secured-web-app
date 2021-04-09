@@ -29,25 +29,6 @@ if (auth_admin() !== false) {
 
     if (isset($_GET["action"])) {
 
-        // Get product name and price
-        if ($_GET["action"] == 'api') {
-            if (isset($_POST['id'])) {
-                header('Content-Type: application/json');
-                $sql = "SELECT * FROM products WHERE pid='" . $_POST['id'] . "' LIMIT 1";// LIMIT 3
-                if ($result = $db->query($sql)) {
-                    while ($row = $result->fetch_row()) {
-                        echo json_encode(array('id' => $row[0], 'name' => $row[2], 'price' => $row[3]));
-                    }
-                    $result->free_result();
-                }
-                exit;
-            } else {
-                header('Content-Type: application/json');
-                echo json_encode(array('msg' => 'Error!'));
-                exit;
-            }
-        }
-
         // Add product
         if ($_GET["action"] == 'add' && isset($_POST["name"])) {
             $sql = $db->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");

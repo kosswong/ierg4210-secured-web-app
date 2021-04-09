@@ -13,6 +13,7 @@ function user_logout($custom_message = '')
         }
 
         session_start();
+        $_SESSION['4210SHOP'] = NULL;
         $_SESSION['username'] = 'Guest';
         $_SESSION['userid'] = -1;
         $_SESSION['msg'] = ["type" => "success", "msg" => ($custom_message != '' ? $custom_message : "Login successfully.")];
@@ -27,7 +28,7 @@ function user_login($email, $password, $nonce)
     try {
         if (csrf_verifyNonce('login', $nonce) == true) {
             if ((validatePassword($password) != false) || (validateEmail($email, true) != false)) {
-                $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email, true).validatePassword($_POST["password"])];
+                $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email, true) . validatePassword($_POST["password"])];
                 return;
             } else {
                 $db = DB();
@@ -36,12 +37,12 @@ function user_login($email, $password, $nonce)
                 $sql->execute();
                 if ($result = $sql->get_result()) {
                     if ($row = $result->fetch_assoc()) {
-                        if ($row['password'] == hash_hmac('sha1', $password, $row['salt'])) {
+                        if ($row['password'] == hash_hmac('sha1', $password . "IERG4210", $row['salt'] . "IERG4210")) {
                             $exp = time() + 3600 * 24 * 3;
                             $token = [
                                 'em' => $row['email'],
                                 'exp' => $exp,
-                                'k' => hash_hmac('sha1', $exp . $row['password'], $row['salt'])
+                                'k' => hash_hmac('sha1', $exp . $row['password'] . "IERG4210", $row['salt'] . "IERG4210")
                             ];
                             setcookie('auth', json_encode($token), $exp, '/', 'localhost', true, true);
 
@@ -85,12 +86,12 @@ function user_register($email, $password, $nonce)
     try {
         if (csrf_verifyNonce('register', $nonce) == true) {
             if ((validatePassword($password) != false) || (validateEmail($email) != false)) {
-                $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email).validatePassword($_POST["password"])];
+                $_SESSION['msg'] = ['type' => 'danger', 'content' => validateEmail($email) . validatePassword($_POST["password"])];
                 return;
             } else {
                 $algo = 'sha1';
                 $salt = generate_salt();
-                $password_encrypted = hash_hmac($algo, $password, $salt);
+                $password_encrypted = hash_hmac($algo, $password . "IERG4210", $salt . "IERG4210");
                 $ip = get_ip();
 
                 $db = DB();

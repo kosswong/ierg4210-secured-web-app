@@ -1,7 +1,7 @@
 CREATE TABLE `categories` (
-  `catid` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+                              `catid` int(11) NOT NULL,
+                              `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+                              `cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
@@ -18,7 +18,7 @@ INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
 (11, 'Pet Food & Care', '寵物食品及護理'),
 (12, 'Home & Entertainment', '家庭及娛樂'),
 (13, 'Clothing, Sports & Outdoors', '服裝, 運動及戶外用品'),
-(14, 'Books, Gifts & Festive Products', '書籍、禮品及節日產品');
+(14, 'Books, Gifts&Festive Products', '書籍、禮品及節日產品');
 
 CREATE TABLE `products` (
   `pid` int(11) NOT NULL,
@@ -40,8 +40,69 @@ INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`, `banding
 (5, 2, 'THAI HOM MALI RICE', 23.9, 'Eat rice is good', 'SILVERSPOON', 'Thailand', '1KG', '5.jpg'),
 (6, 2, 'ORGANIC KETCHUP', 32.5, 'Approved by the United States Department of Agriculture (USDA), 100% manufactured by organic tomatoes. The manufacture process is strictly monitored. We ensure the tomatoes are of the highest standard starting from seeding, harvest till production.', 'HEINZ ', 'USA', '14OZ', '6.jpg');
 
+CREATE TABLE `orders` (
+                          `id` int(11) UNSIGNED NOT NULL,
+                          `uid` int(11) NOT NULL,
+                          `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+                          `currency` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                          `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                          `cart` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                          `total` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                          `completed` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `users` (
+                         `userid` int(255) UNSIGNED NOT NULL,
+                         `admin` int(11) NOT NULL,
+                         `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `salt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `verified` int(11) NOT NULL DEFAULT 0,
+                         `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `expried` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `user_roles` (
+                              `id` int(11) NOT NULL,
+                              `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `user_roles` (`id`, `role`) VALUES
+(1, 'admin'),
+(2, 'editor'),
+(3, 'user');
+
 ALTER TABLE `categories`
-  ADD PRIMARY KEY (`catid`);
+    ADD PRIMARY KEY (`catid`);
 
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`pid`);
+    ADD PRIMARY KEY (`pid`);
+
+ALTER TABLE `categories`
+    ADD PRIMARY KEY (`catid`);
+
+ALTER TABLE `orders`
+    ADD PRIMARY KEY (`id`),
+  ADD KEY `uid` (`uid`);
+
+ALTER TABLE `products`
+    ADD PRIMARY KEY (`pid`);
+
+ALTER TABLE `users`
+    ADD PRIMARY KEY (`userid`),
+  ADD UNIQUE KEY `email` (`email`);
+
+ALTER TABLE `categories`
+    MODIFY `catid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+ALTER TABLE `orders`
+    MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+ALTER TABLE `products`
+    MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+ALTER TABLE `users`
+    MODIFY `userid` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+COMMIT;

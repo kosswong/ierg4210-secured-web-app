@@ -127,7 +127,6 @@ function validateEmail($email, $login = false)
 
 function validatePassword($password)
 {
-    /*
     if (strlen($password) <= '8') {
         return "Your Password Must Contain At Least 8 Characters!";
     } elseif (!preg_match("#[0-9]+#", $password)) {
@@ -137,7 +136,6 @@ function validatePassword($password)
     } elseif (!preg_match("#[a-z]+#", $password)) {
         return "Your Password Must Contain At Least 1 Lowercase Letter!";
     }
-    */
     return false;
 }
 
@@ -157,13 +155,13 @@ function auth_admin()
         }
 
         $db = DB();
-        $sql = $db->prepare('SELECT password, salt, expried FROM users WHERE email=? LIMIT 1');
+        $sql = $db->prepare('SELECT password, salt, expried FROM users WHERE email=? AND admin=1 LIMIT 1');
         $sql->bind_param('s', $_SESSION['email']);
         $sql->execute();
 
         if ($result = $sql->get_result()) {
             if ($row = $result->fetch_assoc()) {
-                $real_key = hash_hmac('sha1', $auth['exp'] . $row['password'], $row['salt']);
+                $real_key = hash_hmac('sha1', $auth['exp'] . $row['password'] . "IERG4210", $row['salt'] . "IERG4210");
                 if ($real_key == $auth['k']) {
                     $_SESSION['4210SHOP'] = $auth;
                     return $auth['em'];
