@@ -1,104 +1,143 @@
 <?php
+defined('IERG4210ADMIN') or define('IERG4210ADMIN', true);
 require '../inc/config.inc.php';
-if (auth_admin() !== false) {
-    require 'view/nav.php';
+if (auth_admin() == false) {
+    header("Location: http://localhost");
+    die();
+}
+
+$setting = 'categories';
+function category_main()
+{
     $db = DB();
-
-
-    if (isset($_GET["action"])) {
-
-        if ($_GET["action"] == 'add' && isset($_POST["cat_name"])) {
-
-            $cat_name = isset($_POST["cat_name"]) ? htmlspecialchars($_POST["cat_name"]) : 'N/A';
-            $sql = $db->prepare('INSERT INTO categories (name) VALUES (?)');
-            $sql->bind_param('s', $cat_name);
-            if ($result = $sql->execute()) {
-                echo "New record created successfully. ".$result;
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
-        }
-
-        if ($_GET["action"] == 'delete' && isset($_GET["catid"])) {
-            $sql = "DELETE FROM `categories` WHERE catid='" . $_GET["catid"] . "'";// LIMIT 3
-            if ($db->query($sql) === TRUE) {
-                echo "Deleted!";
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
-        }
-
-        if ($_GET["action"] == 'edit' && isset($_GET["catid"])) {
-            $sql = "SELECT * FROM categories WHERE catid='" . $_GET["catid"] . "' LIMIT 1";// LIMIT 3
-            if ($result = $db->query($sql)) {
-                while ($row = $result->fetch_row()) {
-                    echo 'edit';
-                    echo '';
-                    echo '<form action="categories.php?action=save" method="post">';
-                    echo '<label for="cat_name">Catergoires ID:</label><br>';
-                    echo '' . $row[0] . '<br><br>';
-                    echo '<label for="cat_name">Catergoires Name:</label><br>';
-                    echo '<input type="hidden" id="catid" name="catid" value="' . $row[0] . '">';
-                    echo '<input type="text" id="cat_name" name="cat_name" value="' . $row[1] . '"><br><br>';
-                    echo '<input type="submit" value="Save">';
-                    echo '</form>';
-                }
-                $result->free_result();
-            }
-            exit;
-        }
-
-        if ($_GET["action"] == 'save' && isset($_POST["cat_name"])) {
-            $sql = "UPDATE categories SET name='" . $_POST["cat_name"] . "' WHERE catid='" . $_POST["catid"] . "'";
-            if ($db->query($sql) === TRUE) {
-                echo "Record updated successfully";
-            } else {
-                echo "Error updating record: " . $db->error;
-            }
-        }
-
-    }
-
-// Attempt select query execution
     $sql = "SELECT * FROM categories";// LIMIT 3
-    if ($result = mysqli_query($db, $sql)) {
-        if (mysqli_num_rows($result) > 0) {
-            echo "<table>";
-            echo "<tr>";
-            echo "<th>catid</th>";
-            echo "<th>name</th>";
-            echo "<th>operation</th>";
-            echo "</tr>";
-            while ($row = mysqli_fetch_array($result)) {
-                echo "<tr>";
-                echo "<td>" . $row['catid'] . "</td>";
-                echo "<td>" . $row['name'] . "</td>";
-                echo "<td>
-<a href=\"categories.php?action=edit&catid=" . $row['catid'] . "\">Edit</a>
-<a href=\"categories.php?action=delete&catid=" . $row['catid'] . "\">Delete</a>
-</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-            // Close result set
-            mysqli_free_result($result);
+    if ($categories = mysqli_query($db, $sql)) {
+        if (mysqli_num_rows($categories) > 0) {
+            require 'view/category_main.php';
+            mysqli_free_result($categories);
         } else {
             echo "No records matching your query were found.";
         }
     } else {
-        echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
+        $message_type = 'danger';
+        $message = "ERROR: Could not able to execute $sql. " . mysqli_error($db);
     }
-
-
-} else {
-    header("Location: http://localhost");
-    die();
 }
-?>
 
-Add:<br>
-<form action="categories.php?action=add" method="post">
-    <label for="cat_name">Categories Name:</label><br>
-    <input type="text" id="cat_name" name="cat_name" value="Test"><br><br>
-    <input type="submit" value="Submit">
-</form>
+function category_new()
+{
+    require 'view/category_add.php';
+}
+
+function category_add($name, $cname, $nonce)
+{
+    $name = htmlspecialchars(strip_tags($name));
+    $cname = htmlspecialchars(strip_tags($cname));
+    try {
+        if (csrf_verifyNonce('admin_category_add', $nonce) == true) {
+            $db = DB();
+            $sql = $db->prepare('INSERT INTO categories (name, cname) VALUES (?, ?)');
+            $sql->bind_param('ss', $name, $cname);
+            if ($sql->execute() === TRUE) {
+                $message_type = 'success';
+                $message = "New record " . $name . "(" . $cname . ") created successfully.";
+            } else {
+                $message_type = 'danger';
+                $message = "ERROR: " . $sql . "<br>" . $db->error;
+            }
+        }else{
+            $message_type = 'warning';
+            $message = "Invalid operation.";
+        }
+    } catch (Exception $e) {
+        $message_type = 'warning';
+        $message = "Bad session.";
+    }
+}
+
+function category_edit($cad_id)
+{
+    $db = DB();
+    $sql = $db->prepare('SELECT * FROM categories WHERE catid=? LIMIT 1');
+    $sql->bind_param('i', $cad_id);
+    if ($sql->execute() && $result = $sql->get_result()) {
+        if ($row = $result->fetch_assoc()) {
+            $catid = $row['catid'];
+            $name = $row['name'];
+            $cname = $row['cname'];
+            require 'view/category_edit.php';
+            $result->free_result();
+        }
+    }
+}
+
+function category_save($catid, $name, $cname, $nonce)
+{
+    $name = htmlspecialchars(strip_tags($name));
+    $cname = htmlspecialchars(strip_tags($cname));
+    try {
+        if (csrf_verifyNonce('admin_category_save', $nonce) == true) {
+            $db = DB();
+            $sql = $db->prepare("UPDATE categories SET name=?, cname=? WHERE catid=?");
+            $sql->bind_param('ssi', $name, $cname, $catid);
+            if ($sql->execute() === TRUE) {
+                $message_type = 'success';
+                $message = "Record updated successfully";
+            } else {
+                $message_type = 'danger';
+                $message = "Error updating record: " . $db->error;
+            }
+        }else{
+            $message_type = 'warning';
+            $message = "Invalid operation.";
+        }
+    } catch (Exception $e) {
+        $message_type = 'warning';
+        $message = "Bad session.";
+    }
+    require 'view/message.php';
+}
+
+function category_del($cat_id)
+{
+    $db = DB();
+    $sql = $db->prepare("DELETE FROM categories WHERE catid=?");
+    $sql->bind_param('i', $cat_id);
+    $message = ($sql->execute() === TRUE) ? "Deleted!" : "Error: " . $sql . "<br>" . $db->error;
+    require 'view/message.php';
+}
+
+require 'view/header.php';
+
+if (isset($_REQUEST['action'])) {
+    switch ($_REQUEST['action']) {
+        case 'add':
+            if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["cname"]) && $_POST["name"] != '' && isset($_POST["nonce"])) {
+                category_add($_POST["name"], $_POST["cname"], $_POST["nonce"]);
+            } else {
+                category_new();
+            }
+            exit;
+        case 'edit':
+            if (isset($_GET["catid"])) {
+                category_edit($_GET["catid"]);
+            }
+            exit;
+        case 'save':
+            if (isset($_POST["action"]) && isset($_POST["catid"]) && isset($_POST["name"]) && isset($_POST["cname"]) && $_POST["name"] != '' && isset($_POST["nonce"])) {
+                category_save($_POST["catid"], $_POST["name"], $_POST["cname"], $_POST["nonce"]);
+            }
+            exit;
+        case 'del':
+            if (isset($_GET["catid"])) {
+                category_del($_GET["catid"]);
+            }
+            exit;
+        default:
+            require_full_page('view/error.php');
+    }
+} else {
+    category_main();
+}
+
+require 'view/footer.php';

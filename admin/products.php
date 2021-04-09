@@ -1,90 +1,72 @@
 <?php
+defined('IERG4210ADMIN') or define('IERG4210ADMIN', true);
 require '../inc/config.inc.php';
+if (auth_admin() == false) {
+    header("Location: http://localhost");
+    die();
+}
 
-if (auth_admin() !== false) {
-    require 'view/nav.php';
+$setting = 'products';
+$pid = '';
+$catid = '';
+$name = '';
+$price = '';
+$description = '';
+$categories = [];
+$cat_list = '';
+function product_main()
+{
     $db = DB();
-
-    $pid = '';
-    $catid = '';
-    $name = '';
-    $price = '';
-    $description = '';
-    $categories = [];
-    $cat_list = '';
-
-// Get categories
-    $sql = "SELECT * FROM categories";
+    $sql = "SELECT * FROM products";// LIMIT 3
     if ($result = mysqli_query($db, $sql)) {
         if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                $categories[$row['catid']] = $row['name'];
-                $cat_list .= "<option value=\"" . $row['catid'] . "\">" . $row['name'] . "</option>";
-            }
-            mysqli_free_result($result); // Close result set
+            $products = $result;
+            $categories = get_category();
+            require 'view/product_main.php';
+            mysqli_free_result($result);
+        } else {
+            echo "No records matching your query were found.";
         }
     } else {
         echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
     }
+}
 
-    if (isset($_GET["action"])) {
+function product_add()
+{
+    $categories = get_category();
+    require 'view/product_add.php';
+}
 
-        // Add product
-        if ($_GET["action"] == 'add' && isset($_POST["name"])) {
-            $sql = $db->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");
-            $sql->bind_param('isds', $_POST["catid"], $_POST["name"], $_POST["price"], $_POST["description"]); // 'i' specifies the variable type => 'integer'
-            if ($sql->execute() === TRUE) {
-                $insert_id = $sql->insert_id;
-                echo "New record created successfully";
-                if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
-                    $imageFileType = uploadImage($insert_id);
-                    if ($imageFileType) {
-                        $sql = "UPDATE products SET image='" . $insert_id . '.' . $imageFileType . "' WHERE pid='" . $insert_id . "'";
-                        if ($db->query($sql) === TRUE) {
-                            echo "Record created successfully";
-                        }
-                    }
-                }
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
+function product_edit($pid)
+{
+    $db = DB();
+    $sql = $db->prepare('SELECT * FROM products WHERE pid=? LIMIT 1');
+    $sql->bind_param('i', $pid);
+    if ($sql->execute() && $result = $sql->get_result()) {
+        if ($row = $result->fetch_assoc()) {
+            $categories = get_category();
+            require 'view/product_edit.php';
+            $result->free_result();
         }
+    } else {
+        echo "Error: " . $db->error;
+    }
+}
 
-        // Delete product
-        if ($_GET["action"] == 'delete' && isset($_GET["pid"])) {
-            $sql = "DELETE FROM `products` WHERE pid='" . $_GET["pid"] . "'";// LIMIT 3
-            if ($db->query($sql) === TRUE) {
-                echo "Deleted!";
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
-        }
-
-        // Edit product
-        if ($_GET["action"] == 'edit' && isset($_GET["pid"])) {
-            $sql = "SELECT * FROM products WHERE pid='" . $_GET["pid"] . "' LIMIT 1";// LIMIT 3
-            if ($result = $db->query($sql)) {
-                while ($row = $result->fetch_row()) {
-                    $pid = $row[0];
-                    $catid = $row[1];
-                    $name = $row[2];
-                    $price = $row[3];
-                    $description = $row[4];
-                }
-                $result->free_result();
-            }
-        }
-
-        // Save product
-        if ($_GET["action"] == 'save' && isset($_POST["pid"])) {
-            $sql = $db->prepare("UPDATE products SET name=?, price=?, description=? WHERE pid=?");
-            $sql->bind_param('sdsi', $_POST["name"], $_POST["price"], $_POST["description"], $_POST["pid"]); // 'i' specifies the variable type => 'integer'
+function product_save($pid, $nonce)
+{
+    try {
+        if (csrf_verifyNonce('admin_product_save', $nonce) == true) {
+            $db = DB();
+            $sql = $db->prepare("UPDATE products SET name=?, catid=?, price=?, description=? WHERE pid=?");
+            $sql->bind_param('sidsi', $_POST["name"], $_POST["catid"], $_POST["price"], $_POST["description"], $pid);
             if ($sql->execute() === TRUE) {
                 echo "Record updated successfully";
                 if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
-                    $imageFileType = uploadImage($_POST["pid"]);
+                    $imageFileType = uploadImage($pid);
                     if ($imageFileType) {
-                        $sql = "UPDATE products SET image='" . $_POST["pid"] . '.' . $imageFileType . "' WHERE pid='" . $_POST["pid"] . "'";
+                        $sql = "UPDATE products SET image='" . $pid . '.' . $imageFileType . "' WHERE pid='" . $pid . "'";
                         if ($db->query($sql) === TRUE) {
                             echo "Record updated successfully";
                         }
@@ -94,76 +76,92 @@ if (auth_admin() !== false) {
                 echo "Error updating record: " . $db->error;
             }
         }
-
+    } catch (Exception $e) {
+        echo "Bad session.";
     }
-
-    if (!isset($_GET["action"]) || isset($_GET["action"]) && $_GET["action"] != 'edit') {
-// Attempt select query execution
-        $sql = "SELECT * FROM products";// LIMIT 3
-        if ($result = mysqli_query($db, $sql)) {
-            if (mysqli_num_rows($result) > 0) {
-                echo "<table>";
-                echo "<tr>";
-                echo "<th>pid</th>";
-                echo "<th><a href='categories.php'>Category</a></th>";
-                echo "<th>name</th>";
-                echo "<th>price</th>";
-                echo "<th>description</th>";
-                echo "<th>operation</th>";
-                echo "</tr>";
-                while ($row = mysqli_fetch_array($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['pid'] . "</td>";
-                    echo "<td>" . $categories[$row['catid']] . "</td>";
-                    echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['price'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>
-<a href=\"products.php?action=edit&pid=" . $row['pid'] . "\">Edit</a>
-<a href=\"products.php?action=delete&pid=" . $row['pid'] . "\">Delete</a>
-</td>";
-                    echo "</tr>";
-                }
-                echo "</table>";
-                // Close result set
-                mysqli_free_result($result);
-            } else {
-                echo "No records matching your query were found.";
-            }
-        } else {
-            echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
-        }
-    }
-
-} else {
-    header("Location: http://localhost");
-    die();
 }
-?>
-<br><br>
-<form action="products.php?action=<?= $pid ? 'save' : 'add' ?>" method="post" enctype="multipart/form-data">
-    <?= $pid ? 'Edit' : 'Add' ?> a new product<br>
 
-    <?php if ($pid) { ?>
-        <input type="hidden" id="pid" name="pid" value="<?= $pid ?>">
-        <label for="name">Product ID:</label><br>
-        <?= $pid ? $pid : 'N/A' ?><br><br>
-    <?php } ?>
+function product_delete($pid)
+{
+    $db = DB();
+    $sql = $db->prepare("DELETE FROM `products` WHERE pid=?");
+    $sql->bind_param('i', $pid);
+    $message = ($sql->execute() === TRUE) ? "Deleted!" : "Error: " . $sql . "<br>" . $db->error;
+    require 'view/message.php';
+}
 
-    <label for="name">Product Name:</label><br>
-    <input type="text" id="name" name="name" value="<?= $name ?>"><br><br>
+function product_add_confirm()
+{
+    $db = DB();
+    $message = '';
+    $sql = $db->prepare("INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`) VALUES (NULL, ?, ?, ?, ?)");
+    $sql->bind_param('isds', $_POST["catid"], $_POST["name"], $_POST["price"], $_POST["description"]);
+    if ($sql->execute() === TRUE) {
+        $insert_id = $sql->insert_id;
+        $message .= "New record created successfully";
+        if (isset($_FILES["image"]) && $_FILES["image"]["name"]) {
+            $imageFileType = uploadImage($insert_id);
+            if ($imageFileType) {
+                $sql = "UPDATE products SET image='" . $insert_id . '.' . $imageFileType . "' WHERE pid='" . $insert_id . "'";
+                if ($db->query($sql) === TRUE) {
+                    $message .= "Record created successfully";
+                }
+            }
+        }
+    } else {
+        $message .= "Error: " . $sql . "<br>" . $db->error;
+    }
+    require 'view/message.php';
+}
 
-    <label for="catid">Product Category:</label><br>
-    <select name="catid" id="catid"><?= $cat_list ?></select><br><br>
+function get_category()
+{
+    $db = DB();
+    $sql = "SELECT * FROM categories";
+    $categories = [];
+    $cat_list = "";
+    if ($result = mysqli_query($db, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $categories[$row['catid']] = $row['name'];
+            }
+            mysqli_free_result($result); // Close result set
+        }
+        return $categories;
+    } else {
+        echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
+    }
+}
 
-    <label for="price">Product Price:</label><br>
-    <input name="price" id="price" type="number" min="0.00" max="10000.00" step="0.01" value="<?= $price ?>"><br><br>
-
-    <label for="description">Product Description:</label><br>
-    <textarea id="description" name="description" rows="4" cols="50"><?= $description ?></textarea><br><br>
-
-    <label for="image">Select image to upload:</label><br>
-    <input type="file" name="image" id="fileToUpload"><br><br>
-
-    <input type="submit" value="<?= $pid ? 'Edit' : 'Add' ?>" name="submit">
-</form>
+require 'view/header.php';
+if (isset($_REQUEST['action'])) {
+    switch ($_REQUEST['action']) {
+        case 'add':
+            if (isset($_POST["catid"]) && isset($_POST["name"]) && isset($_POST["price"]) && isset($_POST["description"])) {
+                product_add_confirm();
+            } else {
+                product_add();
+            }
+            exit;
+        case 'edit':
+            if (isset($_GET["pid"])) {
+                product_edit($_GET["pid"]);
+            }
+            exit;
+        case 'save':
+            if (isset($_POST["action"]) && isset($_POST["pid"])) {
+                product_save($_POST["pid"], $_POST["nonce"]);
+            }
+            exit;
+        case 'delete':
+            if (isset($_GET["pid"])) {
+                product_delete($_GET["pid"]);
+            }
+            exit;
+        default:
+            require_full_page('inc/error.php');
+    }
+} else {
+    product_main();
+}
+require 'view/footer.php';
