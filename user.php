@@ -18,8 +18,7 @@ function user_logout($custom_message = '')
         $_SESSION['userid'] = -1;
         $_SESSION['msg'] = ["type" => "success", "msg" => ($custom_message != '' ? $custom_message : "Login successfully.")];
 
-        header("Location: http://localhost");
-        die();
+        redirect_link('index.php');
     }
 }
 

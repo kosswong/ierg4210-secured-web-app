@@ -15,6 +15,13 @@ function DB(): mysqli
     return $db;
 }
 
+function redirect_link($extend_url = '')
+{
+    $website_link = "http://localhost/";
+    header("Location: ".$website_link.$extend_url);
+    die();
+}
+
 function require_header()
 {
     require 'header.php';
