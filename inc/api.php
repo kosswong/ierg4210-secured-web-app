@@ -1,55 +1,56 @@
 <?php
 require 'config.inc.php';
+header('Content-Type: application/json');
 
-
-function validate_cart()
+function validate_cart($id)
 {
-    if (isset($_POST['id'])) {
-        $db = DB();
-        header('Content-Type: application/json');
-        $sql = "SELECT * FROM products WHERE pid='" . $_POST['id'] . "' LIMIT 1";// LIMIT 3
-        if ($result = $db->query($sql)) {
-            while ($row = $result->fetch_row()) {
-                echo json_encode(array('id' => $row[0], 'name' => $row[2], 'price' => $row[3]));
-            }
-            $result->free_result();
+    $db = DB();
+    $sql = "SELECT * FROM products WHERE pid='$id' LIMIT 1";
+    if ($result = $db->query($sql)) {
+        while ($row = $result->fetch_row()) {
+            echo json_encode(array('id' => $row[0], 'name' => $row[2], 'price' => $row[3]));
         }
-        exit;
-    } else {
-        header('Content-Type: application/json');
-        echo json_encode(array('msg' => 'Error!'));
-        exit;
+        $result->free_result();
     }
 }
 
-if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
+function validate_register_email($email)
+{
+    if(validateEmail($email) === false){
+        echo json_encode(array('success' => true));
+    }else{
+        echo json_encode(array('success' => false, 'message' => validateEmail($email)));
+    }
+}
+
+function error_json_message($message = 'Invalid operation.')
+{
+    echo json_encode(array('msg' => $message, 'your_ip' => get_ip()));
+}
+
+if (isset($_POST['action'])) {
+    switch ($_POST['action']) {
         case 'validate_cart':
-            validate_cart();
-            break;
-        case 'register':
-            if (isset($_POST['action']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['nonce'])) {
-                user_register($_POST['email'], $_POST['password'], $_POST['nonce']);
+            if (isset($_POST['id'])) {
+                validate_cart($_POST['id']);
+            } else {
+                error_json_message();
             }
-            require_full_page('inc/user_register.php');
             break;
-        case 'login':
-            if (isset($_POST['action']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['nonce'])) {
-                user_login($_POST['email'], $_POST['password'], $_POST['nonce']);
+        case 'validate_register_email':
+            if (isset($_POST['email'])) {
+                validate_register_email($_POST['email']);
+            } else {
+                error_json_message();
             }
-            require_full_page('inc/user_login.php');
-            break;
-        case 'password':
-            if (isset($_POST['action']) && isset($_POST['password']) && isset($_POST['password_new']) && isset($_POST['nonce'])) {
-                user_change_password($_POST['password'], $_POST['password_new'], $_POST['nonce']);
-            }
-            require_full_page('inc/user_password.php');
             break;
         default:
-            require_full_page('inc/error.php');
+            error_json_message();
     }
+    exit;
 } else {
-    require_full_page('inc/error.php');
+    error_json_message();
+    exit;
 }
 
 ?>

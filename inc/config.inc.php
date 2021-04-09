@@ -105,6 +105,7 @@ function get_ip(): string
 
 function validateEmail($email, $login = false)
 {
+    // Valid email: false, Invalid email: true
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Invalid email format";
     }else{

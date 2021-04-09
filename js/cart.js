@@ -118,9 +118,10 @@ function updateLocalStorage() {
 function retrieveDetailFromServer(itemId, amount = 1) {
     $.ajax({
         type: 'POST',
-        url: 'inc/api.php?action=validate_cart',
+        url: 'inc/api.php',
         dataType: 'json',
         data: {
+            action: 'validate_cart',
             id: itemId,
             amount: amount,
         },
@@ -141,39 +142,32 @@ function retrieveDetailFromServer(itemId, amount = 1) {
 }
 
 
-function validateLoginPassword() {
+function validateLoginPassword(password) {
     $.ajax({
         type: 'POST',
         url: 'inc/api.php?action=validate_password',
         dataType: 'json',
         data: {
-            id: itemId,
-            amount: amount,
+            password: password,
         },
         success: function (msg) {
-            let newItem = ({
-                id: itemId,
-                name: msg.name,
-                price: msg.price,
-                amount: amount,
-                addAt: $.now()
-            });
-            cart.items.push(newItem);
-            let key = itemExistInStorage(cart.items, itemId, true);
-            addItemOnPresenter(key, newItem);
-            updateLocalStorage();
+            if(msg.success === true){
+                $("#register_email_helper").replaceWith("test");
+            }else{
+                $("#register_email_helper").replaceWith("fuck");
+            }
         }
     });
 }
 
-function validateRegisterEmail(){
+function validateRegisterEmail(email){
     $.ajax({
         type: 'POST',
-        url: 'inc/api.php?action=validate_register_email',
+        url: 'inc/api.php',
         dataType: 'json',
         data: {
-            id: itemId,
-            amount: amount,
+            action: 'validate_register_email',
+            email: email,
         },
         success: function (msg) {
             let newItem = ({
