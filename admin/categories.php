@@ -4,12 +4,16 @@ if (auth_admin() !== false) {
     require 'view/nav.php';
     $db = DB();
 
+
     if (isset($_GET["action"])) {
 
         if ($_GET["action"] == 'add' && isset($_POST["cat_name"])) {
-            $sql = "INSERT INTO `categories` (`name`) VALUES ('" . $_POST["cat_name"] . "');";// LIMIT 3
-            if ($db->query($sql) === TRUE) {
-                echo "New record created successfully";
+
+            $cat_name = isset($_POST["cat_name"]) ? htmlspecialchars($_POST["cat_name"]) : 'N/A';
+            $sql = $db->prepare('INSERT INTO categories (name) VALUES (?)');
+            $sql->bind_param('s', $cat_name);
+            if ($result = $sql->execute()) {
+                echo "New record created successfully. ".$result;
             } else {
                 echo "Error: " . $sql . "<br>" . $db->error;
             }

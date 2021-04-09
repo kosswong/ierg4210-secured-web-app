@@ -4,15 +4,20 @@ if (!defined('IERG4210')) {
     exit;
 }
 ?>
-<form method="post">
+
+<form method="post" id="password_form">
     <input type="hidden" name="action" value="password">
     <input type="hidden" name="nonce" value="<?= csrf_getNonce('password') ?>">
     <h1 class="h3 mb-3 font-weight-normal">Change password</h1>
-    <label for="inputEmail" class="sr-only">Current password</label>
-    <input type="password" id="change_password" name="password" class="form-control" placeholder="Old password" required
-           autofocus>
-    <label for="inputPassword" class="sr-only">New Password</label>
-    <input type="password" id="change_password_new" name="password_new" class="form-control" placeholder="New Password"
-           required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Go</button>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Password</label>
+        <input id="change_password" type="password" name="password" class="form-control" placeholder="Password" onchange="validateChangePassword()">
+        <small id="change_password_helper" class="form-text"></small>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">New Password</label>
+        <input id="change_password_new" type="password_new" name="password_new" class="form-control" placeholder="Password" onchange="validateChangePasswordNew()">
+        <small id="change_password_new_helper" class="form-text"></small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>

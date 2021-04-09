@@ -1,6 +1,9 @@
 let cart = {};
 cart.items = [];
 
+let registerEmailValidated = false;
+let registerPasswordValidated = false;
+
 $(document).ready(function () {
 
     // Check local data, it nothing exist, then create
@@ -16,12 +19,15 @@ $(document).ready(function () {
     }
 
     $(".btn-add-to-cart").click(function (e) {
+        $("#add-item-modal").modal();
         let amount = 1;
         if ($.isNumeric($(".btn-add-to-cart-main-amount").val())) {
             amount = parseInt($(".btn-add-to-cart-main-amount").val())
         }
         let t = $(this);
         let loadingText = 'Adding...';
+        $("#add-item-modal-content").html(loadingText);
+
         if (t.html() !== loadingText) {
             t.data('original-text', t.html());
             t.html(loadingText);
@@ -44,10 +50,22 @@ $(document).ready(function () {
         updateLocalStorage();
     });
 
-    $("#register_email").change(function(){
-        validateRegisterEmail($(this).val());
+    // Register
+    $("#register_email").change(function(){validateRegisterEmail($(this).val())});
+    $("#register_password").change(function(){validateRegisterPassword($(this).val())});
+    $("#register_form").submit(function(event) {
+        if (registerEmailValidated === false) {
+            alert("Please fix your email.");
+            $("#register_email").addClass('is-invalid');
+            event.preventDefault();
+        } else if (registerPasswordValidated === false) {
+            alert("Please fix your password.");
+            $("#register_password").addClass('is-invalid');
+            event.preventDefault();
+        } else {
+            this.submit();
+        }
     });
-
 });
 
 function addItemOnPresenter(key, item) {
@@ -63,14 +81,12 @@ function addItemOnPresenter(key, item) {
     );
 }
 
-
 function itemExistInStorage(items, itemId, itemKey = false) {
     for (let i = 0; i < items.length; i++) {
         if (items[i].id === itemId)
             return (itemKey === true) ? i : items[i];
     }
 }
-
 
 function onChangeItemAmount(item, key, directValue = 0) {
 	if (item.value > 0) {
@@ -85,7 +101,6 @@ function onChangeItemAmount(item, key, directValue = 0) {
     updateLocalStorage();
 }
 
-
 function removeItem(key) {
     cart.items.splice(key, 1);
     $("#shopping-list").empty();
@@ -98,22 +113,20 @@ function removeItem(key) {
     updateLocalStorage();
 }
 
-
 function updateTotalPriceOnPresenter() {
     let totalPrice = 0;
     $.each(cart.items, function (key, value) {
         totalPrice += value.amount * value.price;
     });
+    $("#add-item-modal-content").html("Added amount successfully.");
     $(".shopping-cart-popup-price").html('$ ' + totalPrice.toFixed(2));
     $(".shopping-cart-popup-item-amount").html('(' + cart.items.length + ')');
 }
-
 
 function updateLocalStorage() {
     localStorage.setItem("shopping_cart", JSON.stringify(cart));
     updateTotalPriceOnPresenter();
 }
-
 
 function retrieveDetailFromServer(itemId, amount = 1) {
     $.ajax({
@@ -135,27 +148,9 @@ function retrieveDetailFromServer(itemId, amount = 1) {
             });
             cart.items.push(newItem);
             let key = itemExistInStorage(cart.items, itemId, true);
+            $("#add-item-modal-content").html("Added new item successfully.");
             addItemOnPresenter(key, newItem);
             updateLocalStorage();
-        }
-    });
-}
-
-
-function validateLoginPassword(password) {
-    $.ajax({
-        type: 'POST',
-        url: 'inc/api.php?action=validate_password',
-        dataType: 'json',
-        data: {
-            password: password,
-        },
-        success: function (msg) {
-            if(msg.success === true){
-                $("#register_email_helper").replaceWith("test");
-            }else{
-                $("#register_email_helper").replaceWith("fuck");
-            }
         }
     });
 }
@@ -170,17 +165,36 @@ function validateRegisterEmail(email){
             email: email,
         },
         success: function (msg) {
-            let newItem = ({
-                id: itemId,
-                name: msg.name,
-                price: msg.price,
-                amount: amount,
-                addAt: $.now()
-            });
-            cart.items.push(newItem);
-            let key = itemExistInStorage(cart.items, itemId, true);
-            addItemOnPresenter(key, newItem);
-            updateLocalStorage();
+            if(msg.success === true){
+                $("#register_email").removeClass('is-invalid').addClass('is-valid');
+                $("#register_email_helper").removeClass('text-danger').addClass('text-success').html("Your email looks good.");
+            }else{
+                $("#register_email").addClass('is-invalid').removeClass('is-valid');
+                $("#register_email_helper").removeClass('text-success').addClass('text-danger').html(msg.message);
+            }
+            registerEmailValidated = msg.success;
+        }
+    });
+}
+
+function validateRegisterPassword(password){
+    $.ajax({
+        type: 'POST',
+        url: 'inc/api.php',
+        dataType: 'json',
+        data: {
+            action: 'validate_register_password',
+            password: password,
+        },
+        success: function (msg) {
+            if(msg.success === true){
+                $("#register_password").removeClass('is-invalid').addClass('is-valid');
+                $("#register_password_helper").removeClass('text-danger').addClass('text-success').html("This password can be used.");
+            }else{
+                $("#register_password").addClass('is-invalid').removeClass('is-valid');
+                $("#register_password_helper").removeClass('text-success').addClass('text-danger').html(msg.message);
+            }
+            registerPasswordValidated = msg.success;
         }
     });
 }

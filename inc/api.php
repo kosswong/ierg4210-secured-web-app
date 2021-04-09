@@ -23,9 +23,19 @@ function validate_register_email($email)
     }
 }
 
+function validate_register_password($password)
+{
+    if(validatePassword($password) === false){
+        echo json_encode(array('success' => true));
+    }else{
+        echo json_encode(array('success' => false, 'message' => validatePassword($password)));
+    }
+}
+
 function error_json_message($message = 'Invalid operation.')
 {
-    echo json_encode(array('msg' => $message, 'your_ip' => get_ip()));
+    echo json_encode(array('success' => false, 'msg' => $message, 'your_ip' => get_ip()));
+    exit;
 }
 
 if (isset($_POST['action'])) {
@@ -44,13 +54,16 @@ if (isset($_POST['action'])) {
                 error_json_message();
             }
             break;
+        case 'validate_register_password':
+            if (isset($_POST['password'])) {
+                validate_register_password($_POST['password']);
+            } else {
+                error_json_message();
+            }
+            break;
         default:
             error_json_message();
     }
-    exit;
 } else {
     error_json_message();
-    exit;
 }
-
-?>

@@ -35,8 +35,8 @@ function require_footer()
 function require_full_page($template)
 {
     require_header();
-    /** @noinspection PhpIncludeInspection */
     if (file_exists($template)) {
+        /** @noinspection PhpIncludeInspection */
         require $template;
     } else {
         require "error.php";
