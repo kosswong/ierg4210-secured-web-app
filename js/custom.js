@@ -24,6 +24,9 @@ $(document).ready(function () {
         if ($.isNumeric($(".btn-add-to-cart-main-amount").val())) {
             amount = parseInt($(".btn-add-to-cart-main-amount").val())
         }
+        if(amount < 0){
+            amount = 1;
+        }
         let t = $(this);
         let loadingText = 'Adding...';
         $("#add-item-modal-content").html(loadingText);
