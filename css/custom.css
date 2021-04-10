@@ -22,6 +22,11 @@
     }
 }
 
+.product-thumb{
+    height: 3rem;
+    width: 3rem;
+}
+
 #categories {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -44,7 +49,7 @@ footer {
     display: block;
 }
 
-.navbar {
+.navbar-dark {
     background-color: #343a40 !important;
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
 }
@@ -56,8 +61,6 @@ footer {
 .shopping-list .form-row:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, .1);
 }
-
-
 
 .form-signin {
     width: 100%;

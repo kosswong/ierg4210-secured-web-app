@@ -1,2 +1,0 @@
-username: test@test.com
-pw: aaaaAAAA1111

@@ -59,9 +59,9 @@ function category_edit($cad_id)
     $sql->bind_param('i', $cad_id);
     if ($sql->execute() && $result = $sql->get_result()) {
         if ($row = $result->fetch_assoc()) {
-            $catid = $row['catid'];
-            $name = $row['name'];
-            $cname = $row['cname'];
+            $catid = intval($row['catid']);
+            $name = htmlspecialchars(strip_tags($row['name']));
+            $cname = htmlspecialchars(strip_tags($row['cname']));
             require 'view/category_edit.php';
             $result->free_result();
         }

@@ -6,20 +6,20 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
-(1, 'Beverages, Wine & Spirits', '飲品及酒類'),
+(1, 'Beverages, Wine and Spirits', '飲品及酒類'),
 (2, 'Groceries', '糧油雜貨'),
-(3, 'Biscuits, Snacks & Confectionery', '餅乾、零食及糖果'),
+(3, 'Biscuits, Snacks and Confectionery', '餅乾、零食及糖果'),
 (4, 'Household', '家居用品'),
 (5, 'Baby Care', '嬰兒護理'),
-(6, 'Health & Beauty Care', '保健及個人護理'),
+(6, 'Health and Beauty Care', '保健及個人護理'),
 (7, 'Frozen Food', '急凍食品'),
 (8, 'Fresh Food', '新鮮食品'),
-(9, 'Breakfast & Bakery', '早餐及麵包糕點'),
-(10, 'Dairy, Chilled & Eggs', '乳製品、冷凍食品及雞蛋'),
-(11, 'Pet Food & Care', '寵物食品及護理'),
-(12, 'Home & Entertainment', '家庭及娛樂'),
-(13, 'Clothing, Sports & Outdoors', '服裝, 運動及戶外用品'),
-(14, 'Books, Gifts&Festive Products', '書籍、禮品及節日產品');
+(9, 'Breakfast and Bakery', '早餐及麵包糕點'),
+(10, 'Dairy, Chilled and Eggs', '乳製品、冷凍食品及雞蛋'),
+(11, 'Pet Food and Care', '寵物食品及護理'),
+(12, 'Home and Entertainment', '家庭及娛樂'),
+(13, 'Clothing, Sports and Outdoors', '服裝, 運動及戶外用品'),
+(14, 'Books, Gifts and Festive Products', '書籍、禮品及節日產品');
 
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (

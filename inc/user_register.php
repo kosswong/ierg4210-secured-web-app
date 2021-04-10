@@ -4,20 +4,27 @@ if (!defined('IERG4210')) {
     exit;
 }
 ?>
-
-<form method="post" id="register_form">
-    <input type="hidden" name="action" value="register">
-    <input type="hidden" name="nonce" value="<?= csrf_getNonce('register') ?>">
-    <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input id="register_email" type="email" name="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-        <small id="register_email_helper" class="form-text"></small>
+<div class="card shadow-lg my-5">
+    <div class="card-body p-0">
+        <div class="p-5">
+            <div class="text-center">
+                <h4 class="text-gray-900 mb-4">Register</h4>
+            </div>
+            <form class="user" method="post">
+                <input type="hidden" name="action" value="register">
+                <input type="hidden" name="nonce" value="<?= csrf_getNonce('register') ?>">
+                <div class="form-group">
+                    <label for="register_email">Email address</label>
+                    <input id="register_email" type="email" class="form-control form-control-user" name="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                    <small id="register_email_helper" class="form-text"></small>
+                </div>
+                <div class="form-group">
+                    <label for="register_password">Password</label>
+                    <input id="register_password" type="password" class="form-control form-control-user" name="password" placeholder="Password">
+                    <small id="register_password_helper" class="form-text"></small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-user btn-block">Confirm</button>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input id="register_password" type="password" name="password" class="form-control" placeholder="Password" onchange="validateRegisterPassword()">
-        <small id="register_password_helper" class="form-text"></small>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>

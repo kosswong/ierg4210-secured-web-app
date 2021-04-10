@@ -132,11 +132,10 @@ function get_category()
     $db = DB();
     $sql = "SELECT * FROM categories";
     $categories = [];
-    $cat_list = "";
     if ($result = mysqli_query($db, $sql)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_array($result)) {
-                $categories[$row['catid']] = $row['name'];
+                $categories[$row['catid']] = htmlspecialchars(strip_tags($row['name']));
             }
             mysqli_free_result($result); // Close result set
         }

@@ -1,6 +1,10 @@
 # IERG4210
- 
-Some useful command:
+
+### Demo account:
+- username: test@test.com
+- pw: aaaaAAAA1111
+
+### Some useful command:
 
 `sudo tail -f /var/log/httpd/error_log`
 

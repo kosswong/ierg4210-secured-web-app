@@ -31,15 +31,15 @@ if (!defined('IERG4210ADMIN')){
                     while ($row = mysqli_fetch_array($products)) {
                         ?>
                         <tr>
-                            <td><?= $row['pid'] ?></td>
-                            <td><?= isset($categories[$row['catid']]) ? $categories[$row['catid']] : 'N/A' ?></td>
-                            <td><?= $row['name'] ?></td>
-                            <td><img src="../img/product/s/<?= $row['image'] ?>" class="product-thumb"></td>
-                            <td><?= $row['price'] ?></td>
-                            <td><?= $row['description'] ?></td>
+                            <td><?= intval($row['pid']) ?></td>
+                            <td><?= isset($categories[$row['catid']]) ? htmlspecialchars(strip_tags($categories[$row['catid']])) : 'N/A' ?></td>
+                            <td><?= htmlspecialchars(strip_tags($row['name'])) ?></td>
+                            <td><img src="../img/product/s/<?= urlencode($row['image']) ?>" class="product-thumb"></td>
+                            <td><?= floatval($row['price']) ?></td>
+                            <td><?= htmlspecialchars(strip_tags($row['description'])) ?></td>
                             <td>
-                                <a href="products.php?action=edit&pid=<?= $row['pid'] ?>">Edit</a>
-                                <a href="products.php?action=delete&pid=<?= $row['pid'] ?>">Delete</a>
+                                <a href="products.php?action=edit&pid=<?= intval($row['pid']) ?>">Edit</a>
+                                <a href="products.php?action=delete&pid=<?= intval($row['pid']) ?>">Delete</a>
                             </td>
                         </tr>
                     <?php }

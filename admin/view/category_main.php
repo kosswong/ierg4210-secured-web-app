@@ -27,12 +27,12 @@ if (!defined('IERG4210ADMIN')) {
                     while ($row = mysqli_fetch_array($categories)) {
                         ?>
                         <tr>
-                            <td><?= $row['catid'] ?></td>
-                            <td><?= $row['name'] ?></td>
-                            <td><?= $row['cname'] ?></td>
+                            <td><?= intval($row['catid']) ?></td>
+                            <td><?= htmlspecialchars(strip_tags($row['name'])) ?></td>
+                            <td><?= htmlspecialchars(strip_tags($row['cname'])) ?></td>
                             <td>
-                                <a href="../../admin/categories.php?action=edit&catid=<?= $row['catid'] ?>">Edit</a>
-                                <a href="../../admin/categories.php?action=del&catid=<?= $row['catid'] ?>">Delete</a>
+                                <a href="../../admin/categories.php?action=edit&catid=<?= intval($row['catid']) ?>">Edit</a>
+                                <a href="../../admin/categories.php?action=del&catid=<?= intval($row['catid']) ?>">Delete</a>
                             </td>
                         </tr>
                     <?php }
