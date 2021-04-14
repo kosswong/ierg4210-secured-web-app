@@ -26,5 +26,7 @@ Random salt:
 `sudo systemctl start httpd`
 Ref. https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateWebServer.html
 
+`mysql -uroot -p`
+
 ### Change Owner
 `sudo chown -R ec2-user /var/www/html`
