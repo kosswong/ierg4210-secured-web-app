@@ -21,8 +21,8 @@ INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
 (13, 'Clothing, Sports and Outdoors', '服裝, 運動及戶外用品'),
 (14, 'Books, Gifts and Festive Products', '書籍、禮品及節日產品');
 
-DROP TABLE IF EXISTS `payments`;
-CREATE TABLE `payments` (
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
                           `id` int(11) UNSIGNED NOT NULL,
                           `uid` int(11) NOT NULL,
                           `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -86,7 +86,7 @@ INSERT INTO `user_roles` (`id`, `role`) VALUES
 ALTER TABLE `categories`
     ADD PRIMARY KEY (`catid`);
 
-ALTER TABLE `payments`
+ALTER TABLE `orders`
     ADD PRIMARY KEY (`id`),
   ADD KEY `uid` (`uid`);
 
@@ -101,7 +101,7 @@ ALTER TABLE `users`
 ALTER TABLE `categories`
     MODIFY `catid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
-ALTER TABLE `payments`
+ALTER TABLE `orders`
     MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 ALTER TABLE `products`

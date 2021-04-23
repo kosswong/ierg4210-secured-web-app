@@ -20,6 +20,10 @@ if (!defined('IERG4210ADMIN')){
     <li class="nav-item"><a class="nav-link" href="categories.php"><i class="fas fa-fw fa-table"></i> Category</a></li>
 
     <hr class="sidebar-divider">
+    <div class="sidebar-heading">Payment</div>
+    <li class="nav-item"><a class="nav-link" href="payments.php"><i class="fas fa-fw fa-chart-area"></i> Payments</a></li>
+
+    <hr class="sidebar-divider">
     <div class="sidebar-heading">Client side</div>
     <li class="nav-item"><a class="nav-link" href="../index.php"><i class="fas fa-fw fa-table"></i> Homepage</a></li>
     <li class="nav-item"><a class="nav-link" href="../user.php?action=password"><i class="fas fa-fw fa-sign-out-alt"></i> Change Password</a></li>
