@@ -18,6 +18,9 @@
 `
 
 `ssh -i "ierg4210.pem" ec2-user@ec2-34-228-249-169.compute-1.amazonaws.com`
+
+
+ `/etc/php.ini`
 ### Requirement
 Random salt:
 `sudo apt-get install mcrypt php7.1-mcrypt`
