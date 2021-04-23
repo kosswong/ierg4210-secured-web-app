@@ -181,6 +181,9 @@ if (isset($_REQUEST['action'])) {
             }
             require_full_page('inc/user_password.php');
             break;
+        case 'history':
+            require_full_page('inc/user_history.php');
+            break;
         default:
             require_full_page('inc/error.php');
     }

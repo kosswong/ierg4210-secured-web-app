@@ -5,7 +5,6 @@ if (!defined('IERG4210')) {
 }
 $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL) : 'Guest';
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,6 +23,7 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="index.php">
                     Welcome, <?= $email ?>!
+                    <a href='user.php?action=login'>Shopping History</a> |
                     <?php
                     if ($email == 'Guest') {
                         echo "<a href='user.php?action=login'>Login</a> | <a href='user.php?action=register'>Register</a>";
@@ -41,8 +41,18 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                     <div aria-labelledby="cart" class="dropdown-menu dropdown-menu-right">
-                        <form action="https://api-3t.sandbox.paypal.com/nvp" method="POST">
-                            <input type="hidden" name="nonce" value="<?= csrf_getNonce('shop') ?>">
+                        <form action="checkout.php" method="POST" id="shopping_cart_form">
+                            <input type="hidden" name="nonce" id="nonce_checkout" value="<?= csrf_getNonce('shop') ?>">
+                            <input type="hidden" name="cmd" value="_cart">
+                            <input type="hidden" name="upload" value="1">
+                            <input type="hidden" name="business" value="sb-qawra5773820@business.example.com">
+                            <INPUT TYPE="hidden" name="charset" value="utf-8">
+                            <input type="hidden" name="item_name_1" value="Item Name 1">
+                            <input type="hidden" name="amount_1" value="1.00">
+                            <input type="hidden" name="shipping_1" value="1.75">
+                            <input type="hidden" name="item_name_2" value="Item Name 2">
+                            <input type="hidden" name="amount_2" value="2.00">
+                            <input type="hidden" name="shipping_2" value="2.50">
                             <div class="container shopping-list">
                                 <div id="shopping-list">
                                 </div>

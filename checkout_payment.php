@@ -1,6 +1,7 @@
-<?php require 'inc/header.php'; ?>
-
 <?php
+require 'inc/config.inc.php';
+require 'inc/header.php';
+
 // Connect mySQL
 $conn = mysqli_connect("localhost", "root", "", "test");
 if ($conn === false) {
@@ -80,19 +81,7 @@ mysqli_close($conn);
         <input type="hidden" name="item_name_2" value="Item Name 2">
         <input type="hidden" name="amount_2" value="2.00">
         <input type="hidden" name="shipping_2" value="2.50">
-        <input type="submit" value="PayPal">
-    </form>
-
-    <form class="form-signin" method="post">
-        <h1 class="h3 mb-3 font-weight-normal">Please fill in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="alert alert-danger" role="alert">
-            Invalid Input.
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Pay with PayPal</button>
     </form>
 
 <?php require 'inc/footer.php'; ?>

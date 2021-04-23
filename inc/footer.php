@@ -30,7 +30,7 @@ if (!defined('IERG4210')) {
 
 
 <footer class="container">
-    <p>Auth: Wong Keng Lam
+    <p>Auth: Wong Keng Lam</p>
 </footer>
 
 <script src="js/jquery.js"></script>

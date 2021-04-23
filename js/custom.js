@@ -69,6 +69,42 @@ $(document).ready(function () {
             this.submit();
         }
     });
+
+    //Payment
+    $("#shopping_cart_form").submit(function(e) {
+        let form = $(this);
+        let final_items = [];
+
+        //Pass ONLY the pid and quantity of every individual product
+        $.each( cart.items, function( key, item ) {
+            let item_id = parseInt(item.id);
+            let item_amount = parseInt(item.amount);
+            if((item_id > 0) && (item_amount > 0)){
+                final_items.push(({
+                    id: item_id,
+                    amount: item_amount,
+                }));
+            }
+        });
+
+        //to your server using AJAX and
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            dataType: 'json',
+            data: {
+                nonce: $("#nonce_checkout").val(),
+                items: final_items,
+            },
+            success: function(data)
+            {
+                //window.location = data.url; // show response from the php script.
+            }
+        });
+
+        //cancel the default form submission
+        e.preventDefault();
+    });
 });
 
 function addItemOnPresenter(key, item) {

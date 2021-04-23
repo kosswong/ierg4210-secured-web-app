@@ -37,13 +37,13 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
                             `pid` int(11) NOT NULL,
                             `catid` int(11) NOT NULL,
-                            `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                            `name` varchar(255) COLLATE utf8_unicode_ci NULL,
                             `price` double NOT NULL DEFAULT 0,
-                            `description` text COLLATE utf8_unicode_ci NOT NULL,
-                            `banding` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                            `origin` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                            `capacity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                            `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+                            `description` text COLLATE utf8_unicode_ci NULL,
+                            `banding` varchar(255) COLLATE utf8_unicode_ci NULL,
+                            `origin` varchar(255) COLLATE utf8_unicode_ci NULL,
+                            `capacity` varchar(255) COLLATE utf8_unicode_ci NULL,
+                            `image` varchar(255) COLLATE utf8_unicode_ci NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`, `banding`, `origin`, `capacity`, `image`) VALUES

@@ -94,12 +94,12 @@ require_header();
                                     $pid = intval($row['pid']);
                                     echo '<div class="col-md-4 col-sm-12">'
                                         . '<div class="card">'
-                                        . '<img alt="' . $name . '" class="card-img-top" src="img/product/s/' . $image . '">'
+                                        . '<a href="product.php?pid=' . $pid . '"><img alt="' . $name . '" class="card-img-top" src="img/product/s/' . $image . '"></a>'
                                         . '<div class="card-body">'
-                                        . '<h5 class="card-title">' . $name . '</h5>'
+                                        . '<a href="product.php?pid=' . $pid . '"><h5 class="card-title">' . $name . '</h5></a>'
                                         . '<p class="card-text">HK$' . $price . '</p>'
                                         . '<a class="btn btn-primary" href="product.php?pid=' . $pid . '">Detail</a>'
-                                        . '<button type="button" class="btn btn-warning btn-add-to-cart" id="item-' . $pid . '" data-id="' . $pid . '">Add to cart</button>'
+                                        . '<button type="button" class="btn btn-warning btn-add-to-cart ml-lg-3" id="item-' . $pid . '" data-id="' . $pid . '">Add to cart</button>'
                                         . '</div>'
                                         . '</div>'
                                         . '</div>';
