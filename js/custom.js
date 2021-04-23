@@ -81,8 +81,8 @@ $(document).ready(function () {
             let item_amount = parseInt(item.amount);
             if((item_id > 0) && (item_amount > 0)){
                 final_items.push(({
-                    id: item_id,
-                    amount: item_amount,
+                    pid: item_id,
+                    quantity: item_amount,
                 }));
             }
         });
@@ -98,7 +98,8 @@ $(document).ready(function () {
             },
             success: function(data)
             {
-                //window.location = data.url; // show response from the php script.
+                localStorage.removeItem('shopping_cart');
+                window.location = data.url;
             }
         });
 
