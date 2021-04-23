@@ -3,7 +3,7 @@ require 'inc/config.inc.php';
 unset($_SESSION['4210SHOP']);
 require_header();
 ?>
-Success!
+Failed!
 <?php
 require_footer();
 ?>

@@ -21,8 +21,8 @@ INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
 (13, 'Clothing, Sports and Outdoors', '服裝, 運動及戶外用品'),
 (14, 'Books, Gifts and Festive Products', '書籍、禮品及節日產品');
 
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
+DROP TABLE IF EXISTS `payments`;
+CREATE TABLE `payments` (
                           `id` int(11) UNSIGNED NOT NULL,
                           `uid` int(11) NOT NULL,
                           `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `orders` (
                           `cart` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
                           `total` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
                           `completed` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
                               `id` int(11) NOT NULL,
                               `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `user_roles` (`id`, `role`) VALUES
 (1, 'admin'),
@@ -86,7 +86,7 @@ INSERT INTO `user_roles` (`id`, `role`) VALUES
 ALTER TABLE `categories`
     ADD PRIMARY KEY (`catid`);
 
-ALTER TABLE `orders`
+ALTER TABLE `payments`
     ADD PRIMARY KEY (`id`),
   ADD KEY `uid` (`uid`);
 
@@ -101,7 +101,7 @@ ALTER TABLE `users`
 ALTER TABLE `categories`
     MODIFY `catid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
-ALTER TABLE `orders`
+ALTER TABLE `payments`
     MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 ALTER TABLE `products`

@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: application/json');
+header('Content-Type: application/json');
 require 'inc/config.inc.php';
 
 function error_interrupt_json($msg, $debug = NULL)
@@ -73,7 +73,7 @@ $hash_digest = hash_hmac('sha1', json_encode($digest), $salt . "IERG4210");
 $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL) : 'Guest';
 $uid = -1;
 $digest["cart"] = json_encode($digest["cart"]);
-$sql = $db->prepare("INSERT INTO `orders` (`uid`, `username`, `currency`, `salt`, `cart`, `total`) VALUES (?, ?, ?, ?, ?, ?)");
+$sql = $db->prepare("INSERT INTO `payments` (`uid`, `username`, `currency`, `salt`, `cart`, `total`) VALUES (?, ?, ?, ?, ?, ?)");
 $sql->bind_param('isssss',
 	$uid,
 	$email,
@@ -97,11 +97,14 @@ $insert_id = $sql->insert_id;
 $url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
 $data = ['cmd' => '_cart',
 	'upload' => '1',
+	'txn_id' => $insert_id,
 	'business' => 'sb-qawra5773820@business.example.com',
 	'charset' => 'utf-8',
 	'return' => get_full_url('checkout_success.php'),
 	'cancel_return' => get_full_url('checkout_fail.php'),
-	'notify_url' => get_full_url('checkout_verify.php')
+	'notify_url' => get_full_url('ipn.php'),
+	'custom' => '1',
+	'invoice' => '1',
 ];
 
 foreach ($items_sanitized as $key => $item) {
@@ -113,10 +116,6 @@ echo json_encode(array(
 	'url' => $url . http_build_query($data),
 	'info' => $info
 ));
-
-//Submit the form now to PayPal using programmatic form submission
-//header('Location: ' . $url . http_build_query($data));
-//exit();
 
 
 //https://dcblog.dev/how-to-integrate-paypal-into-php

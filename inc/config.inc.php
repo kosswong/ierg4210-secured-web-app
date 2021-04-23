@@ -18,6 +18,11 @@ function DB(): mysqli
 	return $db;
 }
 
+function get_domain_name()
+{
+	return $GLOBALS["domain_name"];
+}
+
 function get_full_url($extend_url = '')
 {
 	$website_link = $GLOBALS["website_link"];
