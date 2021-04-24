@@ -32,6 +32,7 @@ function product_add()
 {
     $categories = get_category();
     require 'view/product_add.php';
+    require 'view/footer.php';
 }
 
 function product_edit($pid)
@@ -48,6 +49,7 @@ function product_edit($pid)
     } else {
         echo "Error: " . $db->error;
     }
+    require 'view/footer.php';
 }
 
 function product_save($pid, $nonce)
@@ -159,7 +161,6 @@ if (isset($_REQUEST['action'])) {
             if (isset($_GET["pid"])) {
                 product_edit($_GET["pid"]);
             }
-            exit;
         case 'save':
             if (isset($_POST["action"]) && isset($_POST["pid"])) {
                 product_save($_POST["pid"], $_POST["nonce"]);

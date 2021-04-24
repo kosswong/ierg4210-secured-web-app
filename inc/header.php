@@ -23,12 +23,11 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="index.php">
                     Welcome, <?= $email ?>!
-                    <a href='user.php?action=login'>Shopping History</a> |
                     <?php
                     if ($email == 'Guest') {
                         echo "<a href='user.php?action=login'>Login</a> | <a href='user.php?action=register'>Register</a>";
                     } else {
-                        echo "<a href='user.php?action=password'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
+                        echo "<a href='order.php'>Shopping History</a> | <a href='user.php?action=password'>Change Password</a> | <a href='user.php?action=logout'>Logout</a>";
                     }
                     ?>
                 </a>
@@ -46,13 +45,7 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
                             <input type="hidden" name="cmd" value="_cart">
                             <input type="hidden" name="upload" value="1">
                             <input type="hidden" name="business" value="sb-qawra5773820@business.example.com">
-                            <INPUT TYPE="hidden" name="charset" value="utf-8">
-                            <input type="hidden" name="item_name_1" value="Item Name 1">
-                            <input type="hidden" name="amount_1" value="1.00">
-                            <input type="hidden" name="shipping_1" value="1.75">
-                            <input type="hidden" name="item_name_2" value="Item Name 2">
-                            <input type="hidden" name="amount_2" value="2.00">
-                            <input type="hidden" name="shipping_2" value="2.50">
+                            <input TYPE="hidden" name="charset" value="utf-8">
                             <div class="container shopping-list">
                                 <div id="shopping-list">
                                 </div>
@@ -78,5 +71,6 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
         echo '<div class="card bg-' . $msg_type . ' text-white shadow my-5">'
             . '<div class="card-body">'. $msg_content. '</div>'
             . '</div>';
+        unset($_SESSION['msg']);
     }
     ?>

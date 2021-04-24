@@ -11,13 +11,13 @@ function user_logout($custom_message = '')
             $name = trim($parts[0]);
             setcookie($name, '', time() - 1000);
             setcookie($name, '', time() - 1000, '/');
+            setcookie($name, '', time() - 1000, '/', 'secure.s48.ierg4210.ie.cuhk.edu.hk');
         }
 
-        session_start();
         $_SESSION['4210SHOP'] = NULL;
         $_SESSION['username'] = 'Guest';
         $_SESSION['userid'] = -1;
-        $_SESSION['msg'] = ["type" => "success", "msg" => ($custom_message != '' ? $custom_message : "Login successfully.")];
+        $_SESSION['msg'] = ["type" => "success", "msg" => ($custom_message != '' ? $custom_message : "Logout successfully.")];
 
         redirect_link('index.php');
     }
@@ -39,16 +39,16 @@ function user_login($email, $password, $nonce)
                     if ($row = $result->fetch_assoc()) {
                         if ($row['password'] == hash_hmac('sha1', $password . "IERG4210", $row['salt'] . "IERG4210")) {
                             $exp = time() + 3600 * 24 * 3;
-                            $token = [
+                            $token = json_encode([
                                 'em' => $row['email'],
                                 'exp' => $exp,
                                 'k' => hash_hmac('sha1', $exp . $row['password'] . "IERG4210", $row['salt'] . "IERG4210")
-                            ];
-                            setcookie('auth', json_encode($token), $exp, '/', 'localhost', true, true);
+                            ]);
+                            setcookie('auth', $token, $exp, '/', 'secure.s48.ierg4210.ie.cuhk.edu.hk', true, true);
 
                             $sql = $db->prepare('UPDATE users SET expried=?, token=? WHERE email=?');
                             $sql->bind_param('sss', $exp, $token, $email);
-                            if ($sql->execute() === TRUE) {
+                            if ($sql->execute()) {
                                 echo "Record updated successfully";
                                 $_SESSION['email'] = $row['email'];
                                 $_SESSION['userid'] = $row['userid'];
@@ -56,14 +56,14 @@ function user_login($email, $password, $nonce)
                                 $_SESSION['msg'] = ["type" => "success", "msg" => "Login successfully."];
                                 session_regenerate_id();
                                 if ($row['admin'] == 1) {
-                                    header("Location: http://localhost/admin");
+                                    header("Location: https://secure.s48.ierg4210.ie.cuhk.edu.hk/admin");
                                     die();
                                 } else {
-                                    header("Location: http://localhost");
+                                    header("Location: https://secure.s48.ierg4210.ie.cuhk.edu.hk");
                                     die();
                                 }
                             } else {
-                                $_SESSION['msg'] = ["type" => "warning", "content" => "Service currently not available."];
+                                $_SESSION['msg'] = ["type" => "warning", "content" => "Service currently not available.".$sql->error];
                             }
                         } else {
                             $_SESSION['msg'] = ["type" => "danger", "content" => "Login fail: wrong password."];
@@ -100,7 +100,7 @@ function user_register($email, $password, $nonce)
                 if ($sql->execute()) {
                     $_SESSION['msg'] = ['type' => 'success', 'content' => 'Register successfully.'];
                 } else {
-                    $_SESSION['msg'] = ['type' => 'error', 'content' => 'Database error.'];
+                    $_SESSION['msg'] = ["type" => "warning", "content" => "Service currently not available.".$sql->error];
                 }
             }
         }
@@ -133,6 +133,7 @@ function user_change_password($password, $password_new, $nonce)
                             $password_new_encrypted = hash_hmac('sha1', $password_new . "IERG4210", $salt . "IERG4210");
                             $sql = "UPDATE users SET password='$password_new_encrypted', salt='$salt' WHERE email='$email'";
                             if ($db->query($sql) === TRUE) {
+                                $_SESSION['msg'] = ['type' => 'success', 'content' => 'Password change successfully!'];
                                 user_logout("New record created successfully.");
                             } else {
                                 $_SESSION['msg'] = ['type' => 'info', 'content' => 'Database error.'];

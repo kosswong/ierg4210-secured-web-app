@@ -18,6 +18,8 @@ if ($sql->execute() && $result = $sql->get_result()) {
         $description = htmlspecialchars(strip_tags($row['description']));
         $image = urlencode($row['image']);
         $catname = htmlspecialchars(strip_tags($row['cname']));
+    }else{
+        redirect_link("404.php");
     }
 }
 

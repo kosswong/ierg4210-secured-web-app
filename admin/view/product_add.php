@@ -36,6 +36,7 @@ if (!defined('IERG4210ADMIN')){
                           cols="50"></textarea>
             </div>
             <div class="form-group">Image
+                <img id="image_upload_display"/>
                 <input type="file" class="form-control" id="product_image" name="image"
                        placeholder="Select image to upload">
             </div>

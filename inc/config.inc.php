@@ -1,13 +1,11 @@
 <?php
 defined('IERG4210') or define('IERG4210', 'allAccessTheSite');
 
-$domain_name = "localhost";
-$website_link = "http://$domain_name/";
+$domain_name = "secure.s48.ierg4210.ie.cuhk.edu.hk";
+$website_link = "http://secure.s48.ierg4210.ie.cuhk.edu.hk/";
 
 session_set_cookie_params(0, '/', $domain_name, true, true);
 session_start();
-
-$_SESSION['msg'] = [];
 
 function DB(): mysqli
 {
@@ -26,7 +24,7 @@ function get_domain_name()
 function get_full_url($extend_url = '')
 {
 	$website_link = $GLOBALS["website_link"];
-	return $website_link . $extend_url;
+	return "http://secure.s48.ierg4210.ie.cuhk.edu.hk/" . $extend_url;
 }
 
 function redirect_link($extend_url = '')

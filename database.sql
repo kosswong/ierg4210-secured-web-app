@@ -21,17 +21,28 @@ INSERT INTO `categories` (`catid`, `name`, `cname`) VALUES
 (13, 'Clothing, Sports and Outdoors', '服裝, 運動及戶外用品'),
 (14, 'Books, Gifts and Festive Products', '書籍、禮品及節日產品');
 
+DROP TABLE IF EXISTS `payments`;
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
-                          `id` int(11) UNSIGNED NOT NULL,
-                          `uid` int(11) NOT NULL,
-                          `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-                          `currency` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-                          `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-                          `cart` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-                          `total` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-                          `completed` int(11) NOT NULL DEFAULT 0
+  `id` int(11) UNSIGNED NOT NULL,
+  `uid` int(11) NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `cart` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `total` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `completed` int(11) NOT NULL DEFAULT 0,
+  `txn_id` varchar(255) DEFAULT NULL,
+  `receipt` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `digest` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `orders`
+    ADD PRIMARY KEY (`id`),
+  ADD KEY `uid` (`uid`);
+ALTER TABLE `orders`
+    MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=400;
+
+
 
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
@@ -57,19 +68,29 @@ INSERT INTO `products` (`pid`, `catid`, `name`, `price`, `description`, `banding
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
                          `userid` int(255) UNSIGNED NOT NULL,
-                         `admin` int(11) NOT NULL,
-                         `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                         `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                         `salt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                         `admin` int(11) NOT NULL DEFAULT 0,
+                         `email` varchar(255) COLLATE utf8_unicode_ci NULL,
+                         `name` varchar(255) COLLATE utf8_unicode_ci NULL,
+                         `password` varchar(255) COLLATE utf8_unicode_ci NULL,
+                         `salt` varchar(255) COLLATE utf8_unicode_ci NULL,
                          `verified` int(11) NOT NULL DEFAULT 0,
-                         `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                         `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                         `expried` date NOT NULL
+                         `ip` varchar(255) COLLATE utf8_unicode_ci NULL,
+                         `token` varchar(255) COLLATE utf8_unicode_ci NULL,
+                         `expried` varchar(255) COLLATE utf8_unicode_ci NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `users` (`userid`, `admin`, `email`, `name`, `password`, `salt`, `verified`, `ip`, `token`, `expried`) VALUES
 (1, 1, 'test@test.com', '', 'e630e9a1dacee47939f6f6eafb481c5b613be815', '067f4b336ca73441', 0, '::1', '', '0000-00-00');
+
+
+ALTER TABLE `users`
+    ADD PRIMARY KEY (`userid`),
+  ADD UNIQUE KEY `email` (`email`);
+
+
+ALTER TABLE `users`
+    MODIFY `userid` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 
 DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
@@ -86,27 +107,17 @@ INSERT INTO `user_roles` (`id`, `role`) VALUES
 ALTER TABLE `categories`
     ADD PRIMARY KEY (`catid`);
 
-ALTER TABLE `orders`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `uid` (`uid`);
 
 ALTER TABLE `products`
     ADD PRIMARY KEY (`pid`);
 
-ALTER TABLE `users`
-    ADD PRIMARY KEY (`userid`),
-  ADD UNIQUE KEY `email` (`email`);
 
 
 ALTER TABLE `categories`
     MODIFY `catid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
-ALTER TABLE `orders`
-    MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 ALTER TABLE `products`
     MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
-ALTER TABLE `users`
-    MODIFY `userid` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;

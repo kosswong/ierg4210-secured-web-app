@@ -24,8 +24,9 @@ $(document).ready(function () {
         if ($.isNumeric($(".btn-add-to-cart-main-amount").val())) {
             amount = parseInt($(".btn-add-to-cart-main-amount").val())
         }
-        if(amount < 0){
+        if (amount < 0) {
             amount = 1;
+            $("#amount").val(1);
         }
         let t = $(this);
         let loadingText = 'Adding...';
@@ -42,7 +43,7 @@ $(document).ready(function () {
                 retrieveDetailFromServer(t.data("id"));
             } else {
                 itemInStorage["amount"] = parseInt(itemInStorage["amount"]) + amount;
-				$("#item_" + t.data("id")).val(itemInStorage["amount"]);
+                $("#item_" + t.data("id")).val(itemInStorage["amount"]);
                 updateTotalPriceOnPresenter();
             }
 
@@ -54,9 +55,13 @@ $(document).ready(function () {
     });
 
     // Register
-    $("#register_email").change(function(){validateRegisterEmail($(this).val())});
-    $("#register_password").change(function(){validateRegisterPassword($(this).val())});
-    $("#register_form").submit(function(event) {
+    $("#register_email").change(function () {
+        validateRegisterEmail($(this).val())
+    });
+    $("#register_password").change(function () {
+        validateRegisterPassword($(this).val())
+    });
+    $("#register_form").submit(function (event) {
         if (registerEmailValidated === false) {
             alert("Please fix your email.");
             $("#register_email").addClass('is-invalid');
@@ -71,15 +76,15 @@ $(document).ready(function () {
     });
 
     //Payment
-    $("#shopping_cart_form").submit(function(e) {
+    $("#shopping_cart_form").submit(function (e) {
         let form = $(this);
         let final_items = [];
 
         //Pass ONLY the pid and quantity of every individual product
-        $.each( cart.items, function( key, item ) {
+        $.each(cart.items, function (key, item) {
             let item_id = parseInt(item.id);
             let item_amount = parseInt(item.amount);
-            if((item_id > 0) && (item_amount > 0)){
+            if ((item_id > 0) && (item_amount > 0)) {
                 final_items.push(({
                     pid: item_id,
                     quantity: item_amount,
@@ -96,16 +101,24 @@ $(document).ready(function () {
                 nonce: $("#nonce_checkout").val(),
                 items: final_items,
             },
-            success: function(data)
-            {
-                localStorage.removeItem('shopping_cart');
-                window.location = data.url;
+            success: function (data) {
+                if(data.msg){
+                    alert(data.msg);
+                }else{
+                    localStorage.removeItem('shopping_cart');
+                    window.location = data.url;
+                }
             }
         });
 
         //cancel the default form submission
         e.preventDefault();
     });
+
+    $("#product_image").change(function () {
+        $("#image_upload_display").attr("src", URL.createObjectURL(event.target.files[0]));
+    });
+
 });
 
 function addItemOnPresenter(key, item) {
@@ -129,7 +142,7 @@ function itemExistInStorage(items, itemId, itemKey = false) {
 }
 
 function onChangeItemAmount(item, key, directValue = 0) {
-	if (item.value > 0) {
+    if (item.value > 0) {
         cart.items[key]["amount"] = item.value;
     } else {
         if (confirm('Are you sure to remove the item?')) {
@@ -195,7 +208,7 @@ function retrieveDetailFromServer(itemId, amount = 1) {
     });
 }
 
-function validateRegisterEmail(email){
+function validateRegisterEmail(email) {
     $.ajax({
         type: 'POST',
         url: 'inc/api.php',
@@ -205,10 +218,10 @@ function validateRegisterEmail(email){
             email: email,
         },
         success: function (msg) {
-            if(msg.success === true){
+            if (msg.success === true) {
                 $("#register_email").removeClass('is-invalid').addClass('is-valid');
                 $("#register_email_helper").removeClass('text-danger').addClass('text-success').html("Your email looks good.");
-            }else{
+            } else {
                 $("#register_email").addClass('is-invalid').removeClass('is-valid');
                 $("#register_email_helper").removeClass('text-success').addClass('text-danger').html(msg.message);
             }
@@ -217,7 +230,7 @@ function validateRegisterEmail(email){
     });
 }
 
-function validateRegisterPassword(password){
+function validateRegisterPassword(password) {
     $.ajax({
         type: 'POST',
         url: 'inc/api.php',
@@ -227,10 +240,10 @@ function validateRegisterPassword(password){
             password: password,
         },
         success: function (msg) {
-            if(msg.success === true){
+            if (msg.success === true) {
                 $("#register_password").removeClass('is-invalid').addClass('is-valid');
                 $("#register_password_helper").removeClass('text-danger').addClass('text-success').html("This password can be used.");
-            }else{
+            } else {
                 $("#register_password").addClass('is-invalid').removeClass('is-valid');
                 $("#register_password_helper").removeClass('text-success').addClass('text-danger').html(msg.message);
             }

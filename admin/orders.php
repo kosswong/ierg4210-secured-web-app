@@ -7,14 +7,22 @@ if (auth_admin() == false) {
 }
 
 $setting = 'categories';
-function category_main()
+function order_main()
 {
     $db = DB();
-    $sql = "SELECT * FROM categories";// LIMIT 3
-    if ($categories = mysqli_query($db, $sql)) {
-            $count = mysqli_num_rows($categories);
-            require 'view/category_main.php';
-            mysqli_free_result($categories);
+    $sql = "SELECT * FROM orders";
+    if ($orders = mysqli_query($db, $sql)) {
+
+        $sql_product_list = "SELECT pid, name FROM products";
+        $products = mysqli_query($db, $sql_product_list);
+        $products_list = [];
+        while ($row = mysqli_fetch_array($products)) {
+            $products_list[$row["pid"]] = $row["name"];
+        }
+
+        $count = mysqli_num_rows($orders);
+        require 'view/order_main.php';
+        mysqli_free_result($orders);
     } else {
         echo "ERROR: Could not able to execute $sql. " . mysqli_error($db);
     }
@@ -41,7 +49,7 @@ function category_add($name, $cname, $nonce)
                 $message_type = 'danger';
                 $message = "ERROR: " . $sql . "<br>" . $db->error;
             }
-        }else{
+        } else {
             $message_type = 'warning';
             $message = "Invalid operation.";
         }
@@ -84,7 +92,7 @@ function category_save($catid, $name, $cname, $nonce)
                 $message_type = 'danger';
                 $message = "Error updating record: " . $db->error;
             }
-        }else{
+        } else {
             $message_type = 'warning';
             $message = "Invalid operation.";
         }
@@ -134,7 +142,7 @@ if (isset($_REQUEST['action'])) {
             require_full_page('view/error.php');
     }
 } else {
-    category_main();
+    order_main();
 }
 
 require 'view/footer.php';

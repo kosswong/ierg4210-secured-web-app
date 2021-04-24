@@ -8,5 +8,6 @@ if (!defined('IERG4210ADMIN')){
 <script src="../js/jquery.js"></script>
 <script src="../js/bootstrap.js"></script>
 <script src="../js/admin.js"></script>
+<script src="../js/custom.js"></script>
 </body>
 </html>

@@ -20,8 +20,9 @@ if (!defined('IERG4210ADMIN')){
     <li class="nav-item"><a class="nav-link" href="categories.php"><i class="fas fa-fw fa-table"></i> Category</a></li>
 
     <hr class="sidebar-divider">
-    <div class="sidebar-heading">Payment</div>
-    <li class="nav-item"><a class="nav-link" href="payments.php"><i class="fas fa-fw fa-chart-area"></i> Payments</a></li>
+    <div class="sidebar-heading">User</div>
+    <li class="nav-item"><a class="nav-link" href="orders.php"><i class="fas fa-fw fa-chart-area"></i> Orders</a></li>
+
 
     <hr class="sidebar-divider">
     <div class="sidebar-heading">Client side</div>

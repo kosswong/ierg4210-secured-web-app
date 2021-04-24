@@ -36,6 +36,7 @@ $row = isset($row) ? $row : [];
                 <textarea class="form-control" id="product_description" name="description" rows="4" cols="50"><?= $row['description'] ?></textarea>
             </div>
             <div class="form-group">Image
+                <img src="<?= "../../img/product/s/".$row['image'] ?>" id="image_upload_display"/>
                 <input type="file" class="form-control" id="product_image" name="image" placeholder="Select image to upload">
             </div>
             <input class="btn btn-primary btn-user btn-block" type="submit" value="<?= $row['pid'] ? 'Edit' : 'Add' ?>" name="submit">
