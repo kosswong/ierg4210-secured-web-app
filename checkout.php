@@ -114,5 +114,7 @@ foreach ($composed["cart"] as $key => $item) {
 //Submit the form now to PayPal using programmatic form submission
 echo json_encode(array(
     'url' => $url . http_build_query($data),
-    'info' => $info
+    'info' => $info,
+    'invoice' => $insert_id,
+    'custom' => $digest,
 ));

@@ -25,12 +25,12 @@ if (!defined('IERG4210')) {
 <section class="position-relative bg-light" id="categories">
     <div class="container">
         <div class="row">
-            <div class="col-3">
+            <div class="col-12 col-md-3">
                 <div class="list-group" id="list-tab" role="tablist">
                     <?= get_cat_list() ?>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-12 col-md-9">
                 <div class="row">
                     <?= $p_list ?>
                 </div>

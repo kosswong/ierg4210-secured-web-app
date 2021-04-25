@@ -56,9 +56,15 @@ function product_save($pid, $nonce)
 {
     try {
         if (csrf_verifyNonce('admin_product_save', $nonce) == true) {
+
+            $catid = intval($_POST["catid"]);
+            $name = strip_tags($_POST["name"]);
+            $price = strip_tags($_POST["price"]);
+            $description = strip_tags($_POST["description"]);
+
             $db = DB();
             $sql = $db->prepare("UPDATE products SET name=?, catid=?, price=?, description=? WHERE pid=?");
-            $sql->bind_param('sidsi', $_POST["name"], $_POST["catid"], $_POST["price"], $_POST["description"], $pid);
+            $sql->bind_param('sidsi', $name, $catid, $price, $description, $pid);
             if ($sql->execute() === TRUE) {
                 $message_type = 'success';
                 $message = "Record updated successfully.";
@@ -104,9 +110,9 @@ function product_delete($pid)
 function product_add_confirm($catid, $name, $price, $description)
 {
     $catid = intval($catid);
-    $name = htmlspecialchars(strip_tags($name));
-    $catid = floatval($catid);
-    $description = htmlspecialchars(strip_tags($description));
+    $name = strip_tags($name);
+    $price = floatval($price);
+    $description = strip_tags($description);
 
     $db = DB();
     $sql = $db->prepare("INSERT INTO products (pid, catid, name, price, description) VALUES (NULL, ?, ?, ?, ?)");
@@ -137,7 +143,7 @@ function get_category()
     if ($result = mysqli_query($db, $sql)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_array($result)) {
-                $categories[$row['catid']] = htmlspecialchars(strip_tags($row['name']));
+                $categories[$row['catid']] = strip_tags($row['name']);
             }
             mysqli_free_result($result); // Close result set
         }

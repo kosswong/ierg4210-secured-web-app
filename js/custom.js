@@ -105,6 +105,8 @@ $(document).ready(function () {
                 if(data.msg){
                     alert(data.msg);
                 }else{
+                    $("#invoice").val(data.invoice);
+                    $("#custom").val(data.custom);
                     localStorage.removeItem('shopping_cart');
                     window.location = data.url;
                 }
@@ -124,9 +126,11 @@ $(document).ready(function () {
 function addItemOnPresenter(key, item) {
     $("#shopping-list").append(
         '<div class="form-row" data-attribute=' + item.id + '>\n' +
-        '    <div class="form-group col-12"><label for="item_' + item.id + '">' + item.name + '</label></div>\n' +
+        '<input type="hidden" name="item_name_' + item.id + '" value="' + item.name + '">' +
+        '<input type="hidden" name="item_number_' + item.id + '" value="' + item.id + '">' +
+        '    <div class="form-group col-12"><label for="quantity_' + item.id + '">' + item.name + '</label></div>\n' +
         '    <div class="form-group col-6">\n' +
-        '        <input class="form-control" id="item_' + item.id + '" min="0" type="number"\n' +
+        '        <input class="form-control" id="quantity_' + item.id + '" min="0" type="number"\n' +
         '               value="' + item.amount + '"  onchange="onChangeItemAmount(this, ' + key + ', ' + item.id + ');">\n' +
         '    </div>\n' +
         '    <div class="form-group col-6 text-right" id="item_' + item.id + '_price">$' + item.price + '\/each</div>\n' +

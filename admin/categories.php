@@ -27,8 +27,8 @@ function category_new()
 
 function category_add($name, $cname, $nonce)
 {
-    $name = htmlspecialchars(strip_tags($name));
-    $cname = htmlspecialchars(strip_tags($cname));
+    $name = strip_tags($name);
+    $cname = strip_tags($cname);
     try {
         if (csrf_verifyNonce('admin_category_add', $nonce) == true) {
             $db = DB();
@@ -70,8 +70,8 @@ function category_edit($cad_id)
 
 function category_save($catid, $name, $cname, $nonce)
 {
-    $name = htmlspecialchars(strip_tags($name));
-    $cname = htmlspecialchars(strip_tags($cname));
+    $name = strip_tags(trim($name));
+    $cname = strip_tags(trim($cname));
     try {
         if (csrf_verifyNonce('admin_category_save', $nonce) == true) {
             $db = DB();

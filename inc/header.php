@@ -46,6 +46,8 @@ $email = isset($_SESSION['email']) ? filter_var($_SESSION['email'], FILTER_SANIT
                             <input type="hidden" name="upload" value="1">
                             <input type="hidden" name="business" value="sb-qawra5773820@business.example.com">
                             <input TYPE="hidden" name="charset" value="utf-8">
+                            <input TYPE="hidden" id="invoice" name="invoice" value="0">
+                            <input TYPE="hidden" id="custom" name="custom" value="0">
                             <div class="container shopping-list">
                                 <div id="shopping-list">
                                 </div>

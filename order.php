@@ -22,7 +22,7 @@ $products_list = [];
 if ($sql_products->execute()) {
     $product_result = $sql_products->get_result();
     while ($row = $product_result->fetch_assoc()) {
-        $products_list[$row["pid"]] = $row["name"];
+        $products_list[$row["pid"]] = strip_tags($row["name"]);
     }
 } else {
     echo "ERROR: Could not able to execute $sql_products. " . mysqli_error($db);
@@ -57,9 +57,12 @@ require_header();
                                             $items = json_decode($row['cart'], true);
                                             $items = is_array($items) ? $items : [];
                                             foreach ($items as &$item) {
-                                                $name = isset($item["quantity"]) && isset($products_list) ? $products_list[$item["pid"]] : "N/A";
-                                                $quantity = isset($item["quantity"]) ? $item["quantity"] : "N/A";
-                                                $price = isset($item["price"]) ? $item["price"] : "N/A";
+                                                if(!isset($item["quantity"]) && !isset($item["pid"]) && !isset($item["price"])){
+                                                    continue;
+                                                }
+                                                $name = isset($item["quantity"]) && isset($products_list) ? strip_tags($products_list[$item["pid"]]) : "N/A";
+                                                $quantity = isset($item["quantity"]) ? intval($item["quantity"]) : "N/A";
+                                                $price = isset($item["price"]) ? floatval($item["price"] ): "N/A";
                                                 ?>
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col mr-2">
