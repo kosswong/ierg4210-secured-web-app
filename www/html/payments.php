@@ -105,6 +105,7 @@ if (isset($_POST["txn_id"]) && isset($_POST["txn_type"])) {
                 $database_digest = $row['digest'];
             }
         }
+
         $composed = [];
         $composed["currency"] = "HKD";    //Currency
         $composed["business"] = "sb-qawra5773820@business.example.com";   //Merchant’s email address
@@ -123,9 +124,18 @@ if (isset($_POST["txn_id"]) && isset($_POST["txn_type"])) {
         }
         $digest = hash_hmac('sha1', json_encode($composed), $database_salt . "IERG4210");
 
+        //For debug
+        /*
+        $composed_cart_json = json_encode($composed)."_".$database_digest."_".$digest."_".$txn_id;//for debug
+        $db = DB();
+        $sql = $db->prepare("UPDATE orders SET completed=1, cart=? WHERE id=?");
+        $sql->bind_param('si', $composed_cart_json, $invoice);
+        $sql->execute();
+        */
+
         //Validate the digest against the one stored in the database table orders
         if ($database_digest == $digest) {
-            $composed_json = json_encode($composed);
+            //$composed_json = json_encode($composed);
             $composed_cart_json = json_encode($composed["cart"]);
             $db = DB();
             $sql = $db->prepare("UPDATE orders SET completed=1, cart=?, txn_id=? WHERE id=?");
