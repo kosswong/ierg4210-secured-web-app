@@ -21,8 +21,8 @@ $(document).ready(function () {
     $(".btn-add-to-cart").click(function (e) {
         $("#add-item-modal").modal();
         let amount = 1;
-        if ($.isNumeric($(".btn-add-to-cart-main-amount").val())) {
-            amount = parseInt($(".btn-add-to-cart-main-amount").val())
+        if ($.isNumeric($("#amount").val())) {
+            amount = parseInt($("#amount").val())
         }
         if (amount < 0) {
             amount = 1;
@@ -40,10 +40,10 @@ $(document).ready(function () {
             // If item already exist
             let itemInStorage = itemExistInStorage(cart.items, t.data("id"));
             if (!itemInStorage) {
-                retrieveDetailFromServer(t.data("id"));
+                retrieveDetailFromServer(t.data("id"), amount);
             } else {
                 itemInStorage["amount"] = parseInt(itemInStorage["amount"]) + amount;
-                $("#item_" + t.data("id")).val(itemInStorage["amount"]);
+                $("#quantity_" + t.data("id")).val(itemInStorage["amount"]);
                 updateTotalPriceOnPresenter();
             }
 
@@ -145,7 +145,7 @@ function itemExistInStorage(items, itemId, itemKey = false) {
     }
 }
 
-function onChangeItemAmount(item, key, directValue = 0) {
+function onChangeItemAmount(item, key) {
     if (item.value > 0) {
         cart.items[key]["amount"] = item.value;
     } else {
@@ -153,6 +153,7 @@ function onChangeItemAmount(item, key, directValue = 0) {
             removeItem(key);
         } else {
             cart.items[key]["amount"] = 1;
+            $("#quantity_" + cart.items[key]["id"]).val(1);
         }
     }
     updateLocalStorage();
