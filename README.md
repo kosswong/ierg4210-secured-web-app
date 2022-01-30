@@ -1,4 +1,4 @@
-# IERG4210
+# Secured web app
 
 ### Demo account:
 - username: test@test.com
